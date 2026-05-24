@@ -46,6 +46,7 @@ for (i in seq_len(nrow(manifest))) {
 }
 
 combined <- merge(objects[[1]], y = objects[-1], add.cell.ids = manifest$sample_token, project = "GSE136103")
+combined <- JoinLayers(combined)
 
 qc_raw <- combined@meta.data |>
   tibble::rownames_to_column("cell") |>
@@ -105,8 +106,9 @@ marker_panel <- intersect(marker_panel, rownames(combined))
 dot <- DotPlot(combined, features = marker_panel, group.by = "compartment_call") +
   RotatedAxis() +
   ggtitle("Marker validation for required compartments") +
-  theme_project()
-save_plot(dot, file.path(cfg$paths$figures_dir, "required_compartment_marker_dotplot.png"), 12, 5)
+  theme_project() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1))
+save_plot(dot, file.path(cfg$paths$figures_dir, "required_compartment_marker_dotplot.png"), 13, 5.5)
 
 Idents(combined) <- "compartment_call"
 de_results <- list()
@@ -131,7 +133,7 @@ for (compartment in c("mesenchymal_HSC_myofibroblast", "macrophage_monocyte", "e
 de_tbl <- bind_rows(de_results)
 safe_write(de_tbl, file.path(cfg$paths$tables_dir, "compartment_de_cell_level_exploratory.csv"))
 
-avg <- AverageExpression(combined, group.by = c("disease_state", "compartment_call"), assays = "RNA", slot = "data")$RNA
+avg <- AverageExpression(combined, group.by = c("disease_state", "compartment_call"), assays = "RNA", layer = "data")$RNA
 avg_tbl <- as.data.frame(as.matrix(avg)) |> tibble::rownames_to_column("gene")
 safe_write(avg_tbl, file.path(cfg$paths$tables_dir, "average_expression_by_disease_compartment.csv"))
 

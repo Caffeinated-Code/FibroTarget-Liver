@@ -45,7 +45,7 @@ read_10x_from_tar <- function(archive, sample_row, extract_dir) {
 marker_score <- function(object, markers) {
   present <- intersect(markers, rownames(object))
   if (length(present) == 0) return(rep(NA_real_, ncol(object)))
-  Matrix::colMeans(GetAssayData(object, assay = "RNA", slot = "data")[present, , drop = FALSE])
+  Matrix::colMeans(GetAssayData(object, assay = "RNA", layer = "data")[present, , drop = FALSE])
 }
 
 safe_write <- function(x, path) {
@@ -59,7 +59,7 @@ save_plot <- function(plot, path, width = 8, height = 5) {
 }
 
 collapse_to_pseudobulk <- function(object, genes, group_cols) {
-  counts <- GetAssayData(object, assay = "RNA", slot = "counts")
+  counts <- GetAssayData(object, assay = "RNA", layer = "counts")
   meta <- object@meta.data
   genes <- intersect(genes, rownames(counts))
   key <- apply(meta[, group_cols, drop = FALSE], 1, paste, collapse = "|")

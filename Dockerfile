@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.4.2
+FROM rocker/r-ver:4.6.0
 
 LABEL org.opencontainers.image.title="Human Liver Fibrosis Single-Cell Target Discovery"
 LABEL org.opencontainers.image.description="Reproducible R pipeline for liver fibrosis biomarker and target prioritization"
