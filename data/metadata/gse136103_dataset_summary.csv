@@ -1,0 +1,6 @@
+species,tissue,disease_state,include_primary,libraries
+Homo sapiens,blood,blood_reference,FALSE,4
+Homo sapiens,liver,cirrhotic,TRUE,9
+Homo sapiens,liver,healthy,TRUE,11
+Mus musculus,mouse_liver,fibrotic,FALSE,1
+Mus musculus,mouse_liver,healthy,FALSE,1

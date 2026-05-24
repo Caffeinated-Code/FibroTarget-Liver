@@ -1,0 +1,17 @@
+.git
+.DS_Store
+data/raw
+data/external
+data/downloads
+data/processed
+reports
+dashboard/data
+logs
+renv/library
+renv/staging
+*.rds
+*.RData
+*.h5ad
+*.h5seurat
+karyon_ceo_convo.txt
+Karyon_Bio_Candidate_Assignment.pdf

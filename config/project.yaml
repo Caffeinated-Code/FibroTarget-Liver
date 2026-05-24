@@ -1,0 +1,97 @@
+project:
+  name: liver_fibrosis_single_cell_target_discovery
+  primary_accession: GSE136103
+  local_run_profile: compact
+  cloud_ready: true
+
+paths:
+  raw_dir: data/raw
+  metadata_dir: data/metadata
+  processed_dir: data/processed
+  results_dir: reports
+  figures_dir: reports/figures
+  tables_dir: reports/tables
+  logs_dir: logs
+  dashboard_data_dir: dashboard/data
+
+aws:
+  region: us-west-2
+  s3_bucket: null
+  s3_prefix: liver-fibrosis-single-cell
+  batch_queue: null
+  batch_job_definition: null
+  container_image: liver-fibrosis-single-cell:local
+  notes: >
+    Local paths are mirrored to expected S3 prefixes in production:
+    raw, metadata, processed, reports, logs, and dashboard/data.
+
+datasets:
+  primary:
+    accession: GSE136103
+    title: Resolving the fibrotic niche of human liver cirrhosis using single-cell transcriptomics
+    download_url: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE136103&format=file"
+    archive: data/raw/GSE136103_RAW.tar
+    species_scope: Homo sapiens
+    include_main_analysis:
+      - healthy liver
+      - cirrhotic liver
+    exclude_main_analysis:
+      - PBMC
+      - mouse
+    reference_object_note: >
+      Published Seurat object from Edinburgh DataShare may be used as an
+      annotation/QC reference, but count matrices remain the reproducible input.
+  validation:
+    - accession: GSE244832
+      priority: 1
+      role: MASH HSC and myofibroblast validation
+      download_url: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE244832&format=file"
+      expected_size: large
+      use_if: local disk and runtime allow focused processed-file extraction
+    - accession: GSE207310
+      priority: 2
+      role: Human NAFLD/NASH bulk liver directionality check
+      download_url: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE207310&format=file"
+      expected_size: moderate
+      use_if: processed expression table and phenotype labels are available
+    - accession: SCP2154
+      priority: 3
+      role: Human liver fibrosis macrophage atlas validation
+      download_url: null
+      expected_size: portal_dependent
+      use_if: access and export format are practical
+
+analysis:
+  min_cells_per_gene: 3
+  min_genes_per_cell: 200
+  max_mito_percent_default: 25
+  top_variable_genes: 3000
+  disease_contrast:
+    reference: healthy
+    case: cirrhotic
+  key_compartments:
+    mesenchymal:
+      aliases: [stellate, myofibroblast, fibroblast, mesenchymal]
+      markers: [COL1A1, COL3A1, ACTA2, TAGLN, PDGFRB, LUM, DCN, RGS5, PDGFRA]
+    macrophage:
+      aliases: [macrophage, monocyte, scar-associated macrophage]
+      markers: [TREM2, CD9, SPP1, GPNMB, FABP5, CD63, LST1, C1QA, C1QB, C1QC]
+    endothelial:
+      aliases: [endothelial, scar-associated endothelial]
+      markers: [ACKR1, PLVAP, VWF, PECAM1, KDR, RAMP2, ENG]
+
+prioritization:
+  score_components:
+    disease_association: 20
+    compartment_specificity: 15
+    donor_consistency: 15
+    pathway_support: 15
+    external_validation: 15
+    translational_modality: 10
+    model_organism_conservation: 5
+    safety_or_specificity_risk: -10
+  candidate_classes:
+    - diagnostic biomarker
+    - pharmacodynamic biomarker
+    - therapeutic target
+    - mechanistic marker
