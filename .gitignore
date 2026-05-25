@@ -30,6 +30,9 @@ data/validation/
 *.h5
 *.mtx
 *.mtx.gz
+!data/demo/**/*.mtx
+!data/demo/**/*.tsv
+!data/demo/**/*.csv
 *.tsv.gz
 *.csv.gz
 outputs/

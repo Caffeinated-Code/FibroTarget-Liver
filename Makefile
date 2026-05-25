@@ -1,7 +1,7 @@
 CONFIG ?= config/project.yaml
 R ?= Rscript
 
-.PHONY: help setup check fetch-data curate analyze prioritize validation evidence demo dashboard report all clean
+.PHONY: help setup check fetch-data curate analyze prioritize validation evidence demo dashboard report validate-repo all clean
 
 help:
 	@echo "Targets:"
@@ -15,6 +15,7 @@ help:
 	@echo "  make demo         Create a small GSE136103 demo dataset"
 	@echo "  make dashboard    Prepare dashboard-ready data"
 	@echo "  make report       Render text report artifacts"
+	@echo "  make validate-repo Check reviewer-facing repo structure"
 	@echo "  make all          Run the local compact workflow"
 
 setup:
@@ -50,6 +51,9 @@ dashboard:
 
 report:
 	$(R) workflow/06_write_reports.R --config $(CONFIG)
+
+validate-repo:
+	python3 scripts/validate_repo_structure.py
 
 all: check fetch-data curate analyze prioritize validation evidence dashboard report
 

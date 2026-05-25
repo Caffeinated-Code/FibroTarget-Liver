@@ -1,31 +1,65 @@
-# Human Liver Fibrosis Single-Cell Target Discovery
+# FibroTarget-Liver
 
-This repository analyzes public human liver single-cell RNA-seq data to identify fibrosis-associated cell states and prioritize biomarker or therapeutic target candidates with translational rationale.
+**FibroTarget-Liver** is a reproducible single-cell target-discovery workflow for human liver fibrosis, MASH, and cirrhosis. It starts from public count matrices, runs a Seurat-based analysis, validates candidate targets against external liver disease datasets, enriches targets with public evidence, and packages the results for review in tables, figures, reports, and a Shiny dashboard.
 
-The primary discovery dataset is **GSE136103**, the Ramachandran et al. human cirrhosis single-cell RNA-seq study. The local workflow uses **R/Seurat** and starts from the public GEO count matrices. The analysis focuses on three compartments central to liver fibrosis biology: activated mesenchymal and myofibroblast-like cells, macrophage and monocyte populations, and endothelial cells.
+The primary analysis uses **GSE136103**, the Ramachandran et al. human cirrhosis single-cell RNA-seq dataset. Validation support uses **GSE244832** for MASH/HSC target evidence and **GSE207310** for bulk NAFLD/NASH biomarker directionality.
 
-## Key Outputs
+## Start Here
 
-- Executive summary: [reports/executive_summary/README.md](reports/executive_summary/README.md)
-- Written screening responses: [reports/screening_responses/README.md](reports/screening_responses/README.md)
-- Biology primer: [docs/biology_primer_liver_fibrosis.docx](docs/biology_primer_liver_fibrosis.docx)
-- Ranked candidates: [reports/tables/ranked_biomarker_target_candidates.csv](reports/tables/ranked_biomarker_target_candidates.csv)
-- Enriched candidates with public target evidence: [reports/tables/ranked_biomarker_target_candidates_enriched.csv](reports/tables/ranked_biomarker_target_candidates_enriched.csv)
-- Pathway enrichment: [reports/tables/hallmark_pathway_enrichment.csv](reports/tables/hallmark_pathway_enrichment.csv)
-- Validation feasibility: [reports/tables/validation_dataset_feasibility.csv](reports/tables/validation_dataset_feasibility.csv)
-- Validation dataset preparation: [docs/validation_datasets.md](docs/validation_datasets.md)
-- Public target evidence notes: [docs/public_target_evidence.md](docs/public_target_evidence.md)
-- Interactive dashboard: [dashboard/app.R](dashboard/app.R)
-- Nextflow/AWS scaffold: [nextflow/README.md](nextflow/README.md)
-- AWS production notes: [docs/aws_production_notes.md](docs/aws_production_notes.md)
+For a fast review:
 
-## Main Findings
+1. [Interviewer guide](docs/interviewer_guide.md)
+2. [Executive summary](reports/executive_summary/README.md)
+3. [Enriched ranked candidates](reports/tables/ranked_biomarker_target_candidates_enriched.csv)
+4. [Marker validation figure](reports/figures/required_compartment_marker_dotplot.png)
+5. [Interactive dashboard](dashboard/README.md)
 
-The compact Seurat analysis recovered the required disease-relevant compartments across healthy and cirrhotic donors. Marker validation supported broad mesenchymal/HSC/myofibroblast-like, macrophage/monocyte, and endothelial calls.
+For implementation details:
 
-The highest ranked candidates include scar-associated endothelial markers **ACKR1** and **PLVAP**, stromal and matrix remodeling markers **TIMP1**, **COL3A1**, **COL1A1**, **MMP2**, **PDGFRA**, **THY1**, **DCN**, and **LUM**, and macrophage-associated candidates **SPP1** and **CD9**. **TREM2**, **GPNMB**, **SMOC2**, **LOXL2**, **SERPINE1**, and **PDGFRB** are retained as biologically important validation or translational candidates, with explicit caveats in the ranked table and executive summary.
+- [Architecture](docs/architecture.md)
+- [Input and output contract](docs/io_contract.md)
+- [Reproducibility](docs/reproducibility.md)
+- [Nextflow and AWS scaffold](nextflow/README.md)
+- [Open-source pipeline roadmap](docs/open_source_pipeline_roadmap.md)
 
-The main biological interpretation is that strong fibrosis readouts are not automatically strong drug targets. Matrix genes are useful biomarkers and pharmacodynamic markers, while receptor, surface, secreted, or enzyme candidates require additional validation for specificity, safety, conservation, and perturbation response.
+## What The Repository Is
+
+This is a **reference workflow and target-prioritization framework**, not a manuscript supplement dump.
+
+It separates:
+
+- analysis code in `workflow/`, `src/`, and `scripts/`
+- reproducible execution in `Makefile`, `renv.lock`, `Dockerfile`, and `nextflow/`
+- data contracts and metadata in `config/` and `data/metadata/`
+- review artifacts in `reports/`, `dashboard/`, and `docs/`
+
+## Main Scientific Question
+
+Which cell-type-linked genes in human liver fibrosis are plausible as:
+
+- diagnostic biomarkers
+- pharmacodynamic biomarkers
+- therapeutic targets
+- mechanistic markers for follow-up validation
+
+The analysis focuses on three fibrosis-relevant compartments:
+
+- activated mesenchymal, HSC, and myofibroblast-like cells
+- macrophage and monocyte populations
+- endothelial cells
+
+## Key Findings
+
+The compact Seurat analysis recovered all required compartments across healthy and cirrhotic donors. Marker validation supports broad mesenchymal/HSC/myofibroblast-like, macrophage/monocyte, and endothelial calls.
+
+Top candidates include:
+
+- endothelial remodeling: **ACKR1**, **PLVAP**, **VWF**
+- stromal and matrix remodeling: **TIMP1**, **COL3A1**, **COL1A1**, **MMP2**, **PDGFRA**, **THY1**, **DCN**, **LUM**
+- macrophage-associated biology: **SPP1**, **CD9**, **TREM2**, **GPNMB**
+- translational validation candidates: **SMOC2**, **LOXL2**, **SERPINE1**, **PDGFRB**
+
+The main interpretation is deliberately conservative: a strong fibrosis marker is not automatically a good therapeutic target. Matrix genes are useful biomarkers and pharmacodynamic markers, while receptor, surface, secreted, or enzyme candidates require additional validation for specificity, safety, conservation, and perturbation response.
 
 ## Reproduce Locally
 
@@ -36,7 +70,13 @@ Requirements:
 - `renv`
 - internet access for public GEO downloads if raw data are not already present
 
-Run:
+Run the full local workflow:
+
+```bash
+make all
+```
+
+Run individual stages:
 
 ```bash
 make check
@@ -50,40 +90,78 @@ make dashboard
 make report
 ```
 
-To launch the dashboard:
+Validate repository structure:
+
+```bash
+make validate-repo
+```
+
+Launch the dashboard:
 
 ```bash
 Rscript -e "shiny::runApp('dashboard')"
 ```
 
-Large raw files and Seurat objects are not committed to Git. The repository tracks the code, configuration, small metadata tables, final review tables, figures, reports, dashboard app, and reproducibility files.
+## Demo Dataset
 
-## Repository Structure
+A tiny GSE136103-derived demo dataset is tracked under `data/demo/` so pipeline wiring can be tested without downloading the full primary archive.
+
+The demo uses a 10x-style Matrix Market layout:
 
 ```text
-config/                 Pipeline and AWS-ready configuration
-workflow/               Modular R workflow steps
-src/R/                  Shared R utilities
-reports/                Figures, tables, executive summary, written responses
-dashboard/              Shiny dashboard and dashboard-ready data
-docs/                   Biology primer and AWS production notes
-data/metadata/          Small curated metadata manifests
-data/demo/              Tiny GSE136103-derived demo dataset
-nextflow/               Nextflow scaffold for local and AWS execution
+data/demo/gse136103_demo_10x/
+  matrix.mtx
+  features.tsv
+  barcodes.tsv
+data/demo/gse136103_demo_metadata.csv
 ```
 
-## Validation Strategy
+## Repository Map
 
-The project records three validation paths:
+```text
+config/                 Config-driven paths, datasets, markers, scoring
+workflow/               Ordered Seurat workflow stages
+src/R/                  Shared R functions
+scripts/                Utility scripts for validation, evidence, demo data
+nextflow/               Local/AWS Nextflow scaffold
+dashboard/              Shiny dashboard and dashboard-ready data
+reports/                Executive summary, figures, tables, written responses
+docs/                   Architecture, IO contract, reproducibility, primer
+data/metadata/          Curated manifests
+data/demo/              Tiny tracked demo dataset
+```
 
-- **GSE244832** for human MASLD/MASH stellate cell and myofibroblast validation
-- **GSE207310** for human NAFLD/NASH bulk liver directionality, especially SMOC2
-- **SCP2154** for macrophage-state validation when portal access and export format are practical
+## Reproducibility And Data Policy
 
-GSE244832 is the highest-priority next validation module because it is human, MASH-relevant, single-nucleus and multiomic, and focused on hepatic stellate cell activation.
+Tracked:
 
-## Important Caveats
+- code
+- config
+- demo data
+- metadata manifests
+- compact figures and tables
+- dashboard-ready CSVs
+- documentation
 
-The current differential expression is exploratory cell-level DE. Cells from the same donor are not independent biological replicates, so donor-aware pseudobulk testing is the next highest-value improvement. The current compartment labels are marker-supported broad calls, not a final expert cell atlas annotation.
+Not tracked:
 
-References and interpretation details are included in the executive summary.
+- raw GEO archives
+- extracted validation matrices
+- large Seurat objects
+- logs
+- private notes
+
+Large data are expected to live in local ignored directories for this repo and in S3 or EFS for AWS execution.
+
+## Current Limitations
+
+- Differential expression is currently exploratory cell-level DE. Donor-aware pseudobulk is the next statistical upgrade.
+- GSE244832 is prepared and summarized for candidate validation, but full object-level reanalysis is a future module.
+- GSE207310 is staged, but symbol-level computed validation needs an Ensembl-to-symbol annotation module.
+- The Nextflow layer is a scaffold. It was not executed locally because Java was unavailable on this machine.
+
+## References
+
+- Ramachandran et al. Resolving the fibrotic niche of human liver cirrhosis at single-cell level. Nature, 2019.
+- Rinella et al. A multisociety Delphi consensus statement on new fatty liver disease nomenclature. Hepatology, 2023.
+- GSE244832 and GSE207310 GEO records for validation datasets.
