@@ -19,12 +19,17 @@ candidates <- read_dash("ranked_candidates.csv")
 de <- read_dash("de_results.csv")
 pathways <- read_dash("pathway_enrichment.csv")
 qc <- read_dash("qc_summary.csv")
+pseudobulk <- if (file.exists(file.path(data_dir, "pseudobulk_priority_gene_de.csv"))) read_dash("pseudobulk_priority_gene_de.csv") else tibble()
+hsc_validation <- if (file.exists(file.path(data_dir, "gse244832_hsc_candidate_validation.csv"))) read_dash("gse244832_hsc_candidate_validation.csv") else tibble()
+refined_clusters <- if (file.exists(file.path(data_dir, "refined_cluster_annotations.csv"))) read_dash("refined_cluster_annotations.csv") else tibble()
+
+color_choices <- intersect(c("disease_state", "refined_cell_state", "reference_label", "compartment_call", "donor", "fraction"), colnames(umap))
 
 ui <- fluidPage(
   titlePanel("Human Liver Fibrosis Single-Cell Target Discovery"),
   sidebarLayout(
     sidebarPanel(
-      selectInput("color_by", "UMAP color", choices = c("disease_state", "compartment_call", "donor", "fraction"), selected = "compartment_call"),
+      selectInput("color_by", "UMAP color", choices = color_choices, selected = if ("refined_cell_state" %in% color_choices) "refined_cell_state" else "compartment_call"),
       selectInput("compartment", "DE compartment", choices = sort(unique(de$compartment))),
       width = 3
     ),
@@ -32,6 +37,9 @@ ui <- fluidPage(
       tabsetPanel(
         tabPanel("UMAP", plotlyOutput("umap_plot", height = 650)),
         tabPanel("Candidates", DTOutput("candidate_table")),
+        tabPanel("Pseudobulk DE", DTOutput("pseudobulk_table")),
+        tabPanel("GSE244832 HSC Validation", DTOutput("hsc_validation_table")),
+        tabPanel("Reference Labels", DTOutput("refined_cluster_table")),
         tabPanel("Differential Expression", DTOutput("de_table")),
         tabPanel("Pathways", DTOutput("pathway_table")),
         tabPanel("QC", DTOutput("qc_table"))
@@ -51,6 +59,18 @@ server <- function(input, output, session) {
 
   output$candidate_table <- renderDT({
     datatable(candidates, filter = "top", options = list(pageLength = 15, scrollX = TRUE))
+  })
+
+  output$pseudobulk_table <- renderDT({
+    datatable(pseudobulk, filter = "top", options = list(pageLength = 20, scrollX = TRUE))
+  })
+
+  output$hsc_validation_table <- renderDT({
+    datatable(hsc_validation, filter = "top", options = list(pageLength = 20, scrollX = TRUE))
+  })
+
+  output$refined_cluster_table <- renderDT({
+    datatable(refined_clusters, filter = "top", options = list(pageLength = 20, scrollX = TRUE))
   })
 
   output$de_table <- renderDT({

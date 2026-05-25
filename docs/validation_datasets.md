@@ -23,8 +23,10 @@ Tracked summaries:
 - `reports/tables/validation_gse244832_candidate_expression_by_condition.csv`
 - `reports/tables/validation_gse244832_candidate_expression_by_cluster.csv`
 - `reports/tables/validation_gse244832_candidate_expression_by_sample.csv`
+- `reports/tables/gse244832_hsc_like_cluster_scores.csv`
+- `reports/tables/gse244832_hsc_candidate_validation.csv`
 
-These tables aggregate the ranked candidate genes across NORMAL, MASL, and MASH cells without loading the full object into memory.
+These tables aggregate the ranked candidate genes across NORMAL, NAFL, and NASH cells without loading the full object into memory. The focused HSC module identifies HSC-like clusters from collagen, stromal, and PDGFR marker expression, then evaluates SMOC2, TIMP1, COL1A1, COL3A1, PDGFRA, and PDGFRB in that compartment.
 
 ## GSE207310
 
@@ -47,6 +49,7 @@ Tracked summary:
 
 ```bash
 make validation
+make hsc-validation
 ```
 
 Large validation data are excluded from Git. The compact summaries and manifests are tracked.

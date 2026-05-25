@@ -25,7 +25,10 @@ Major steps:
 7. Ran Hallmark pathway enrichment on compartment-specific upregulated genes.
 8. Built a transparent target prioritization score using data support, biology, validation evidence, modality, conservation, and translational risk.
 9. Prepared dashboard-ready files for interactive review.
-10. Prepared compact validation summaries from GSE244832 and public target evidence from Open Targets, ClinicalTrials.gov, and ClinVar.
+10. Refined cluster labels against the published Ramachandran Seurat annotation object from Edinburgh DataShare.
+11. Re-ran disease differential expression as donor-level pseudobulk models per refined cell state.
+12. Ran focused GSE244832 validation for HSC/myofibroblast candidates.
+13. Added public target evidence from Open Targets, ClinicalTrials.gov, ClinVar, UniProt, PubMed, and mouse orthology mapping.
 
 ## Key Findings
 
@@ -37,7 +40,7 @@ The required disease-relevant compartments were recovered across both healthy an
 
 The analysis reproduced major biology from the original fibrotic niche paper: scar-associated endothelial markers ACKR1 and PLVAP, collagen-rich mesenchymal programs, and macrophage-associated disease signals.
 
-Top ranked candidates in this compact run included ACKR1, PLVAP, TIMP1, COL3A1, COL1A1, MMP2, SPP1, PDGFRA, VWF, THY1, DCN, CD9, LUM, ACTA2, PDGFRB, TREM2, SMOC2, SERPINE1, LOXL2, and GPNMB.
+Top ranked candidates in this compact run included ACKR1, PLVAP, TIMP1, COL3A1, COL1A1, MMP2, SPP1, PDGFRA, VWF, THY1, DCN, CD9, LUM, ACTA2, PDGFRB, TREM2, SMOC2, SERPINE1, LOXL2, and GPNMB. The new donor-level pseudobulk module adds a stricter evidence layer and should be favored over cell-level DE when nominating targets.
 
 ## Interpretation
 
@@ -47,7 +50,30 @@ The most plausible therapeutic target class in this compact analysis is receptor
 
 Macrophage candidates require more caution. SPP1 and CD9 have direct signal in the compact analysis. TREM2 and GPNMB are retained because of strong external and published disease-state evidence, but they did not receive direct compartment-matched DE support in this marker-score run. They should be considered macrophage-state biomarkers or validation priorities before being treated as target candidates.
 
-SMOC2 is a strong translational biomarker candidate despite modest signal in the cirrhosis single-cell analysis. GSE207310 and the associated publication support SMOC2 as an HSC-linked secreted marker associated with human NAFLD/NASH severity and plasma detection.
+SMOC2 is best treated as a translational biomarker candidate rather than a direct target at this stage. It was modest in the primary cirrhosis pseudobulk contrast, but the focused GSE244832 validation showed higher expression in HSC-like NASH clusters than normal HSC-like clusters. That pattern is consistent with the independent NAFLD/NASH literature and makes SMOC2 useful as a disease-state and pharmacodynamic readout.
+
+## Completed Follow-Up Experiments
+
+The requested follow-up experiments were implemented as pipeline modules:
+
+- `workflow/07_refine_annotations.R`: loads the published `tissue.rdata` Seurat object and uses `annotation_lineage` and `annotation_indepth` as a reference for refined cluster labels.
+- `workflow/08_pseudobulk_de.R`: aggregates counts by donor and refined cell state, then fits limma models for cirrhotic versus healthy liver.
+- `workflow/09_gse244832_hsc_validation.R`: identifies HSC-like validation clusters and summarizes SMOC2, TIMP1, COL1A1, COL3A1, PDGFRA, and PDGFRB across NORMAL, NAFL, and NASH.
+- `scripts/enrich_translational_evidence.py` and `workflow/10_merge_translational_evidence.R`: add protein localization, tissue specificity, PubMed perturbation signal, trial context, mouse orthology, safety notes, and translational nomination language.
+
+Key donor-level pseudobulk signals:
+
+- HSC/myofibroblast refined state: COL1A1, COL3A1, TIMP1, PDGFRA, PLVAP, and ACKR1 were higher in cirrhosis with donor-level support.
+- Endothelial refined state: ACKR1 had strong donor-level support; PLVAP trended positive but was weaker after multiple testing.
+- Macrophage refined states: macrophage markers remain biologically important, but target claims require more external validation and perturbation evidence.
+
+PLVAP and ACKR1 appearing in the HSC/myofibroblast refined state should be interpreted carefully. In scar tissue, endothelial and stromal programs sit in the same niche, and single-cell clusters can carry ambient RNA, doublet remnants, or mixed transitional signal. These genes remain strongest as vascular niche markers until spatial or protein-level localization confirms the cellular source.
+
+Key GSE244832 HSC-like validation signals:
+
+- SMOC2, TIMP1, PDGFRA, and PDGFRB showed higher HSC-like expression in NASH than normal.
+- COL1A1 and COL3A1 are strong matrix readouts, but the validation pattern reinforces them as fibrosis burden markers rather than direct therapeutic targets.
+- The dataset labels use `NORMAL`, `NAFL`, and `NASH`; the report interprets `NASH` as the MASH-relevant steatohepatitis validation state.
 
 ## Pathway-Level Biology
 
@@ -83,13 +109,12 @@ This is a compact analysis, not a full production-grade discovery program.
 - Single-cell and single-nucleus validation datasets can differ in cell capture and expression profiles.
 - Ligand-receptor and target claims require perturbational validation.
 
-## Recommended Next Experiments
+## Remaining Next Experiments
 
-1. Re-run differential expression with donor-level pseudobulk models per refined cell state.
-2. Use the published Seurat annotation object as a reference to refine cluster labels.
-3. Run GSE244832 as the first external validation module, focused on HSC/myofibroblast candidates.
-4. Validate SMOC2, TIMP1, PLVAP, ACKR1, COL1A1/COL3A1, PDGFRA/B, and macrophage-state candidates against orthogonal public data.
-5. For target candidates, add protein localization, tissue specificity, mouse conservation, safety, and perturbation evidence before nominating a therapeutic program.
+1. Extend GSE207310 validation with Ensembl-to-symbol annotation and phenotype mapping for bulk directionality.
+2. Add SCP2154 or another macrophage-focused atlas for TREM2, CD9, SPP1, and GPNMB.
+3. Add spatial validation for PLVAP, ACKR1, SMOC2, TIMP1, and collagen genes in scar-adjacent niches.
+4. Move from prioritization to perturbation: HSC spheroid, precision-cut liver slice, or co-culture assays for PDGFRA/B and SMOC2/TIMP1 biomarker response.
 
 ## Key References
 

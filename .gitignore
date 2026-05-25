@@ -5,6 +5,7 @@ karyon_ceo_convo.txt
 data/raw/
 data/external/
 data/downloads/
+data/reference/
 data/validation/
 *.fastq
 *.fastq.gz

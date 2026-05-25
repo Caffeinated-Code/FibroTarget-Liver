@@ -1,0 +1,90 @@
+annotation_lineage,annotation_indepth,condition,cells
+MPs,MPs (1),Uninjured,869
+MPs,MPs (1),Cirrhotic,280
+MPs,MPs (2),Uninjured,661
+MPs,MPs (2),Cirrhotic,43
+MPs,MPs (3),Uninjured,441
+MPs,MPs (3),Cirrhotic,484
+MPs,MPs (4),Uninjured,360
+MPs,MPs (4),Cirrhotic,1162
+MPs,MPs (5),Uninjured,395
+MPs,MPs (5),Cirrhotic,1019
+MPs,MPs (6),Uninjured,953
+MPs,MPs (6),Cirrhotic,329
+MPs,MPs (7),Uninjured,741
+MPs,MPs (7),Cirrhotic,38
+MPs,MPs (8),Uninjured,664
+MPs,MPs (8),Cirrhotic,538
+MPs,MPs (9),Uninjured,617
+MPs,MPs (9),Cirrhotic,87
+MPs,Cycling MPs (1),Uninjured,61
+MPs,Cycling MPs (1),Cirrhotic,43
+MPs,Cycling MPs (2),Uninjured,3
+MPs,Cycling MPs (2),Cirrhotic,41
+MPs,Cycling MPs (3),Uninjured,23
+MPs,Cycling MPs (3),Cirrhotic,5
+MPs,Cycling MPs (4),Uninjured,12
+pDCs,pDCs,Uninjured,115
+pDCs,pDCs,Cirrhotic,170
+ILCs,ILCs (1),Uninjured,2438
+ILCs,ILCs (1),Cirrhotic,81
+ILCs,ILCs (2),Uninjured,2742
+ILCs,ILCs (2),Cirrhotic,1815
+ILCs,ILCs (3),Uninjured,2575
+ILCs,ILCs (3),Cirrhotic,1275
+ILCs,Cycling ILCs (1),Uninjured,195
+ILCs,Cycling ILCs (1),Cirrhotic,64
+ILCs,Cycling ILCs (2),Uninjured,71
+ILCs,Cycling ILCs (2),Cirrhotic,58
+Tcells,Tcells (1),Uninjured,3659
+Tcells,Tcells (1),Cirrhotic,317
+Tcells,Tcells (2),Uninjured,1958
+Tcells,Tcells (2),Cirrhotic,4861
+Tcells,Tcells (3),Uninjured,3056
+Tcells,Tcells (3),Cirrhotic,177
+Tcells,Tcells (4),Uninjured,3072
+Tcells,Tcells (4),Cirrhotic,1864
+Tcells,Tcells (5),Uninjured,898
+Tcells,Tcells (5),Cirrhotic,122
+Tcells,Cycling Tcells,Uninjured,126
+Tcells,Cycling Tcells,Cirrhotic,91
+Bcells,Bcells (1),Uninjured,346
+Bcells,Bcells (1),Cirrhotic,640
+Bcells,Bcells (2),Uninjured,361
+Bcells,Bcells (2),Cirrhotic,382
+Plasma Bcells,Plasma Bcells (1),Uninjured,311
+Plasma Bcells,Plasma Bcells (1),Cirrhotic,157
+Plasma Bcells,Plasma Bcells (2),Uninjured,87
+Plasma Bcells,Plasma Bcells (2),Cirrhotic,335
+Mast cells,Mast cells,Uninjured,40
+Mast cells,Mast cells,Cirrhotic,30
+Endothelia,Endothelia (1),Uninjured,1356
+Endothelia,Endothelia (1),Cirrhotic,115
+Endothelia,Endothelia (2),Uninjured,42
+Endothelia,Endothelia (2),Cirrhotic,231
+Endothelia,Endothelia (3),Uninjured,576
+Endothelia,Endothelia (3),Cirrhotic,40
+Endothelia,Endothelia (4),Uninjured,172
+Endothelia,Endothelia (4),Cirrhotic,4
+Endothelia,Endothelia (5),Uninjured,787
+Endothelia,Endothelia (5),Cirrhotic,752
+Endothelia,Endothelia (6),Uninjured,73
+Endothelia,Endothelia (6),Cirrhotic,1707
+Endothelia,Endothelia (7),Uninjured,70
+Endothelia,Endothelia (7),Cirrhotic,2070
+Mesenchyme,Mesenchyme (1),Uninjured,904
+Mesenchyme,Mesenchyme (1),Cirrhotic,128
+Mesenchyme,Mesenchyme (2),Uninjured,600
+Mesenchyme,Mesenchyme (2),Cirrhotic,258
+Mesenchyme,Myofibroblasts,Uninjured,67
+Mesenchyme,Myofibroblasts,Cirrhotic,251
+Mesothelia,Mesothelia,Uninjured,2
+Mesothelia,Mesothelia,Cirrhotic,106
+Hepatocytes,Hepatocytes,Uninjured,44
+Hepatocytes,Hepatocytes,Cirrhotic,276
+Cholangiocytes,Cholangiocytes (1),Uninjured,909
+Cholangiocytes,Cholangiocytes (1),Cirrhotic,45
+Cholangiocytes,Cholangiocytes (2),Uninjured,140
+Cholangiocytes,Cholangiocytes (2),Cirrhotic,1448
+Cholangiocytes,Cholangiocytes (3),Uninjured,36
+Cholangiocytes,Cholangiocytes (3),Cirrhotic,791

@@ -1,0 +1,25 @@
+seurat_cluster,refined_cell_state,reference_label,annotation_lineage,compartment_call,canonical_state,correlation,reference_confidence
+0,reference_Tcells,Tcells (1),Tcells,other_or_unresolved,Reference-supported non-priority lineage,0.9742430737187285,high
+1,macrophage_marker_supported,ILCs (2),ILCs,macrophage_monocyte,MPs / scar-associated macrophage program,0.9892095868999436,high
+2,reference_Tcells,Tcells (4),Tcells,other_or_unresolved,Reference-supported non-priority lineage,0.9738049852463467,high
+3,macrophage_reference_supported,MPs (4),MPs,macrophage_monocyte,MPs / scar-associated macrophage program,0.9631952846476238,high
+4,macrophage_reference_supported,MPs (8),MPs,macrophage_monocyte,MPs / scar-associated macrophage program,0.9757607344498813,high
+5,endothelial_reference_supported,Endothelia (7),Endothelia,endothelial,Endothelia / scar-associated endothelial program,0.9850737622939549,high
+6,reference_ILCs,ILCs (3),ILCs,other_or_unresolved,Reference-supported non-priority lineage,0.9957835331896544,high
+7,macrophage_marker_supported,Cholangiocytes (2),Cholangiocytes,macrophage_monocyte,MPs / scar-associated macrophage program,0.9814617479357108,high
+8,macrophage_reference_supported,MPs (6),MPs,macrophage_monocyte,MPs / scar-associated macrophage program,0.9833472820453858,high
+9,endothelial_reference_supported,Endothelia (1),Endothelia,endothelial,Endothelia / scar-associated endothelial program,0.9860373434378068,high
+10,macrophage_marker_supported,Tcells (2),Tcells,macrophage_monocyte,MPs / scar-associated macrophage program,0.9532045636312519,high
+11,HSC_myofibroblast_reference_supported,Mesenchyme (2),Mesenchyme,mesenchymal_HSC_myofibroblast,Mesenchyme / myofibroblast program,0.9871571742278755,high
+12,reference_Bcells,Bcells (2),Bcells,other_or_unresolved,Reference-supported non-priority lineage,0.9597682108293869,high
+13,reference_Tcells,Tcells (2),Tcells,other_or_unresolved,Reference-supported non-priority lineage,0.8938472200550004,high
+14,endothelial_reference_supported,Endothelia (5),Endothelia,endothelial,Endothelia / scar-associated endothelial program,0.9976317194326604,high
+15,macrophage_marker_supported,Plasma Bcells (1),Plasma Bcells,macrophage_monocyte,MPs / scar-associated macrophage program,0.9833137897593509,high
+16,macrophage_marker_supported,Cycling ILCs (1),ILCs,macrophage_monocyte,MPs / scar-associated macrophage program,0.9183676522345902,high
+17,reference_pDCs,pDCs,pDCs,other_or_unresolved,Reference-supported non-priority lineage,0.98647074385483835,high
+18,HSC_myofibroblast_reference_supported,Myofibroblasts,Mesenchyme,mesenchymal_HSC_myofibroblast,Mesenchyme / myofibroblast program,0.9974804368960623,high
+19,endothelial_reference_supported,Endothelia (2),Endothelia,endothelial,Endothelia / scar-associated endothelial program,0.9878601818806726,high
+20,macrophage_marker_supported,Cycling MPs (1),MPs,macrophage_monocyte,MPs / scar-associated macrophage program,0.9323861001798442,high
+21,HSC_myofibroblast_marker_supported,Mesothelia,Mesothelia,mesenchymal_HSC_myofibroblast,Mesenchyme / myofibroblast program,1,high
+22,macrophage_marker_supported,Hepatocytes,Hepatocytes,macrophage_monocyte,MPs / scar-associated macrophage program,0.9623846048274151,high
+23,macrophage_marker_supported,Mast cells,Mast cells,macrophage_monocyte,MPs / scar-associated macrophage program,0.8481851141605767,high

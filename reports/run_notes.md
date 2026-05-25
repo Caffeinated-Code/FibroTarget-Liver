@@ -6,25 +6,26 @@
 - Main analysis package: Seurat 5.5.0
 - Package lock: `renv.lock`
 - Primary input: `data/raw/GSE136103_RAW.tar`
-- Main workflow: `make check`, `make curate`, `make analyze`, `make prioritize`, `make dashboard`
+- Main workflow: `make check`, `make curate`, `make analyze`, `make refine-labels`, `make pseudobulk`, `make prioritize`, `make validation`, `make hsc-validation`, `make evidence`, `make translational-evidence`, `make dashboard`
 
 ## Decisions Made
 
 - Used GEO count matrices as the reproducible input.
-- Kept the published Seurat object as a reference concept, not a dependency, because the assignment asks for QC and preprocessing choices.
+- Used GEO count matrices as the primary reproducible input and used the published Seurat object as an annotation reference, not as a substitute for processing.
 - Excluded blood and mouse samples from the primary human liver discovery contrast.
 - Used marker-supported compartment calls for the required compartments rather than overclaiming full cell-type annotation.
-- Labeled Seurat cell-level DE as exploratory because donor-level pseudobulk is the better inferential strategy.
+- Labeled Seurat cell-level DE as exploratory and added donor-level pseudobulk DE as the primary inferential layer.
 - Kept validation modular. GSE244832 was prepared and summarized for HSC/MASH validation, GSE207310 was staged for biomarker directionality, and SCP2154 remains a macrophage expansion path.
-- Added public target evidence from Open Targets, ClinicalTrials.gov, ClinVar, and MyGene.info.
+- Added public target evidence from Open Targets, ClinicalTrials.gov, ClinVar, MyGene.info, UniProt, PubMed, and mouse orthology mapping.
 
 ## Difficulties
 
 - Seurat was not installed initially. It was installed locally and verified before analysis.
 - Seurat v5 uses layered assays after merge. The workflow now calls `JoinLayers()` explicitly before marker scoring.
 - `renv` initially saw an empty project library. I hydrated it from the local R library and then wrote the lockfile.
-- Full object-level validation with GSE244832 was not run locally because the count matrix is large. Instead, the prepared validation script streams the matrix and aggregates ranked candidate genes by condition, cluster, and sample.
-- The current DE is exploratory cell-level DE. A donor-aware pseudobulk module is the most important next improvement.
+- Full object-level validation with GSE244832 was not run locally because the count matrix is large. Instead, the validation scripts stream compact candidate summaries and run a focused HSC-like cluster module.
+- GSE244832 uses `NASH` in the processed metadata, while the current field commonly uses MASH. The report preserves the source label and interprets it as the MASH-relevant steatohepatitis state.
+- The published reference object is an older Seurat object. The workflow reads the stored normalized matrix and metadata directly, then writes compact reference-informed outputs.
 
 ## Quality Checks Completed
 
@@ -37,12 +38,16 @@
 - Confirmed dashboard data files were generated.
 - Confirmed GSE244832 candidate-expression validation summaries were generated.
 - Confirmed enriched candidate evidence table was generated.
+- Confirmed published reference annotation summaries and refined cluster labels were generated.
+- Confirmed donor-level pseudobulk DE generated priority-gene support tables.
+- Confirmed focused GSE244832 HSC-like validation generated cluster scores and candidate summaries.
+- Confirmed translational evidence and mouse orthology tables were generated.
 
 ## Highest-Value Improvements
 
-1. Add donor-aware pseudobulk DE per refined cell state.
-2. Incorporate the authors' released annotation object for reference mapping and label refinement.
-3. Run focused GSE244832 validation for HSC/myofibroblast candidates.
-4. Add a small public-resource annotation layer for protein class, Human Protein Atlas tissue specificity, Open Targets or ChEMBL druggability, and formal human-mouse orthology.
+1. Complete symbol-level GSE207310 validation with phenotype mapping.
+2. Add a macrophage-specific public atlas module for TREM2, CD9, SPP1, and GPNMB.
+3. Add spatial transcriptomics or spatial proteomics support for scar-niche localization.
+4. Add perturbation assay templates for HSC spheroids, precision-cut liver slices, and co-culture readouts.
 5. Improve cell annotation beyond three required compartments by adding hepatocyte, cholangiocyte, T/NK, B/plasma, mast, cycling, and ambiguous categories.
 6. Convert markdown reports into a polished DOCX/PDF packet once the final README is rewritten.

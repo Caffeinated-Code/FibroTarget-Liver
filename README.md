@@ -10,7 +10,7 @@ For a fast review:
 
 1. [Interviewer guide](docs/interviewer_guide.md)
 2. [Executive summary](reports/executive_summary/README.md)
-3. [Enriched ranked candidates](reports/tables/ranked_biomarker_target_candidates_enriched.csv)
+3. [Translational ranked candidates](reports/tables/ranked_biomarker_target_candidates_translational.csv)
 4. [Marker validation figure](reports/figures/required_compartment_marker_dotplot.png)
 5. [Interactive dashboard](dashboard/README.md)
 
@@ -83,9 +83,13 @@ make check
 make fetch-data
 make curate
 make analyze
+make refine-labels
+make pseudobulk
 make prioritize
 make validation
+make hsc-validation
 make evidence
+make translational-evidence
 make dashboard
 make report
 ```
@@ -155,8 +159,8 @@ Large data are expected to live in local ignored directories for this repo and i
 
 ## Current Limitations
 
-- Differential expression is currently exploratory cell-level DE. Donor-aware pseudobulk is the next statistical upgrade.
-- GSE244832 is prepared and summarized for candidate validation, but full object-level reanalysis is a future module.
+- Cell-level differential expression is retained for exploration; donor-level pseudobulk outputs are now the main inferential tables.
+- GSE244832 is prepared and summarized for candidate validation, including a focused HSC-like cluster module; full object-level reanalysis is a future module.
 - GSE207310 is staged, but symbol-level computed validation needs an Ensembl-to-symbol annotation module.
 - The Nextflow layer is a scaffold. It was not executed locally because Java was unavailable on this machine.
 
