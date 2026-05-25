@@ -28,7 +28,7 @@ This audit maps the assignment and stakeholder clarification to the repository. 
 | Ranked biomarker or target table | Complete | `reports/tables/ranked_biomarker_target_candidates_translational.csv` |
 | Navigable executive summary | Complete | `reports/executive_submission_summary.Rmd`, `reports/executive_submission_summary.html` |
 | Written responses to all eight screening questions | Complete | `reports/screening_responses/README.md` |
-| Optional validation dataset | Complete | GSE244832 focused HSC validation and focused Seurat object reanalysis; GSE207310 symbol-level validation |
+| Optional validation dataset | Complete | GSE244832 focused HSC validation and focused Seurat object reanalysis; GSE207310 symbol-level validation; GSE136103 blood and mouse secondary validation |
 
 ## Stakeholder Clarification Applied
 
@@ -43,7 +43,8 @@ This audit maps the assignment and stakeholder clarification to the repository. 
 | Add public evidence such as Open Targets, ClinVar, trials, conservation, safety, perturbation | Complete | `scripts/enrich_target_evidence.py`, `scripts/enrich_translational_evidence.py`, `reports/tables/target_public_evidence.csv`, `reports/tables/target_translational_evidence.csv`, `reports/tables/target_mouse_orthology.csv` |
 | Consider production/AWS future | Complete | `nextflow/`, `Dockerfile`, `docs/aws_production_notes.md`, `docs/open_source_pipeline_roadmap.md` |
 | Include interactive visualization | Complete | `dashboard/app.R` |
-| Do not track private CEO conversation | Complete | `.gitignore`, `scripts/validate_repo_structure.py`, `git status` |
+| Do not track private conversation notes | Complete | `.gitignore`, `scripts/validate_repo_structure.py`, `git status` |
+| Use blood and mouse samples without confounding the primary contrast | Complete | `workflow/13_validate_blood_mouse_markers.R`, `reports/tables/gse136103_blood_candidate_marker_role_summary.csv`, `reports/tables/gse136103_mouse_candidate_ortholog_summary.csv` |
 
 ## Remaining Gaps And Rationale
 
@@ -52,4 +53,5 @@ This audit maps the assignment and stakeholder clarification to the repository. 
 | Macrophage-focused external validation | Current validation is strongest for HSC and bulk NAFLD/NASH directionality | Add SCP2154 or another accessible macrophage atlas |
 | SCP2154 macrophage atlas validation | Most useful for macrophage candidates, but portal/export logistics make it less reliable for the compact local run | Add as optional portal-dependent module |
 | Full all-gene GSE244832 reanalysis | A focused Seurat object is now implemented; full all-gene reanalysis remains better suited to AWS due matrix size | Run full all-gene object generation as a cloud job |
+| Expanded preclinical validation | GSE136103 mouse validation is executable and ortholog-aware, but it has one healthy and one fibrotic mouse sample | Add larger mouse MASH and fibrosis datasets to the Nextflow validation module |
 | Ligand-receptor mechanism analysis | Addressed in written screening response, but not implemented as a code module | Add LIANA/CellChat/NicheNet module after stable cell-state annotation |

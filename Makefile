@@ -1,7 +1,7 @@
 CONFIG ?= config/project.yaml
 R ?= Rscript
 
-.PHONY: help setup check fetch-data curate analyze refine-labels pseudobulk prioritize validation hsc-validation gse244832-focused gse207310-validation evidence translational-evidence demo dashboard report render-summary validate-repo nextflow-demo all clean
+.PHONY: help setup check fetch-data curate analyze refine-labels pseudobulk prioritize validation hsc-validation gse244832-focused gse207310-validation secondary-validation evidence translational-evidence demo dashboard report render-summary validate-repo nextflow-demo all clean
 
 help:
 	@echo "Targets:"
@@ -16,6 +16,7 @@ help:
 	@echo "  make hsc-validation Run focused GSE244832 HSC/myofibroblast validation"
 	@echo "  make gse244832-focused Run focused GSE244832 Seurat object validation"
 	@echo "  make gse207310-validation Run symbol-level GSE207310 validation"
+	@echo "  make secondary-validation Run GSE136103 blood and mouse marker validation"
 	@echo "  make evidence     Enrich targets with public target/trial evidence"
 	@echo "  make translational-evidence Add localization, conservation, safety, perturbation evidence"
 	@echo "  make demo         Create a small GSE136103 demo dataset"
@@ -63,6 +64,9 @@ gse244832-focused:
 gse207310-validation:
 	$(R) workflow/11_validate_gse207310.R --config $(CONFIG)
 
+secondary-validation:
+	$(R) workflow/13_validate_blood_mouse_markers.R --config $(CONFIG)
+
 evidence:
 	python3 scripts/enrich_target_evidence.py
 	$(R) -e "library(readr); library(dplyr); c <- read_csv('reports/tables/ranked_biomarker_target_candidates.csv', show_col_types=FALSE); e <- read_csv('reports/tables/target_public_evidence.csv', show_col_types=FALSE); write_csv(left_join(c, e, by='gene'), 'reports/tables/ranked_biomarker_target_candidates_enriched.csv')"
@@ -89,7 +93,7 @@ nextflow-demo:
 validate-repo:
 	python3 scripts/validate_repo_structure.py
 
-all: check fetch-data curate analyze refine-labels pseudobulk prioritize validation hsc-validation gse244832-focused gse207310-validation evidence translational-evidence dashboard report render-summary
+all: check fetch-data curate analyze refine-labels pseudobulk prioritize validation hsc-validation gse244832-focused gse207310-validation secondary-validation evidence translational-evidence dashboard report render-summary
 
 clean:
 	rm -rf data/processed reports/tables reports/figures reports/qc dashboard/data logs

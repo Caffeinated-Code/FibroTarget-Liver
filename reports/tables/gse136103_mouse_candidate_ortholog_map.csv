@@ -1,0 +1,17 @@
+human_gene,mouse_gene,mouse_ensembl,support_n,validation_role
+ACKR1,Ackr1,ENSMUSG00000037872,12,scar_endothelial_marker
+C1QA,C1qa,ENSMUSG00000036887,10,macrophage_complement_context
+C1QB,C1qb,ENSMUSG00000036905,9,macrophage_complement_context
+C1QC,C1qc,ENSMUSG00000036896,11,macrophage_complement_context
+CD9,Cd9,ENSMUSG00000030342,12,macrophage_state_marker
+COL1A1,Col1a1,ENSMUSG00000001506,12,fibrosis_burden
+COL3A1,Col3a1,ENSMUSG00000026043,10,fibrosis_burden
+GPNMB,Gpnmb,ENSMUSG00000029816,11,macrophage_state_marker
+LST1,Lst1,ENSMUSG00000073412,10,circulating_myeloid_context
+PDGFRA,Pdgfra,ENSMUSG00000029231,12,stromal_receptor_target
+PDGFRB,Pdgfrb,ENSMUSG00000024620,12,stromal_receptor_target
+PLVAP,Plvap,ENSMUSG00000034845,12,scar_endothelial_marker
+SMOC2,Smoc2,ENSMUSG00000023886,12,secreted_stromal_biomarker
+SPP1,Spp1,ENSMUSG00000029304,12,macrophage_state_marker
+TIMP1,Timp1,ENSMUSG00000001131,11,secreted_matrix_remodeling
+TREM2,Trem2,ENSMUSG00000023992,11,macrophage_state_marker

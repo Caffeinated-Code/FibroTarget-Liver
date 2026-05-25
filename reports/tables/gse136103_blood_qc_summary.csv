@@ -1,0 +1,5 @@
+sample_id,tissue,disease_state,cells,median_detected_genes,median_umis,median_percent_mito
+blood1,blood,blood_reference,8921,1036,3056,4.213298222514812
+blood2,blood,blood_reference,6636,951.5,2850,3.2426305522200396
+blood3,blood,blood_reference,8140,1022,3082,3.4615153360610407
+blood4,blood,blood_reference,7067,1261,4020,3.4947215143793233

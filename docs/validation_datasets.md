@@ -1,6 +1,6 @@
 # Validation Dataset Preparation
 
-Two validation datasets are prepared locally and summarized into compact analysis tables.
+External validation datasets are prepared locally and summarized into compact analysis tables. The excluded blood and mouse libraries from GSE136103 are also analyzed as secondary validation modules.
 
 ## GSE244832
 
@@ -57,6 +57,31 @@ make validation
 make hsc-validation
 make gse244832-focused
 make gse207310-validation
+make secondary-validation
 ```
 
 Large validation data are excluded from Git. The compact summaries and manifests are tracked.
+
+## GSE136103 Blood And Mouse Secondary Validation
+
+Primary use: marker specificity and preclinical conservation checks.
+
+The primary disease contrast uses only human liver tissue. The GSE136103 blood libraries and mouse liver libraries are analyzed separately so they do not confound human liver fibrosis discovery.
+
+Tracked summaries:
+
+- `reports/tables/gse136103_blood_qc_summary.csv`
+- `reports/tables/gse136103_blood_candidate_marker_summary.csv`
+- `reports/tables/gse136103_blood_candidate_marker_role_summary.csv`
+- `reports/tables/gse136103_mouse_qc_summary.csv`
+- `reports/tables/gse136103_mouse_candidate_ortholog_map.csv`
+- `reports/tables/gse136103_mouse_candidate_ortholog_expression.csv`
+- `reports/tables/gse136103_mouse_candidate_ortholog_summary.csv`
+- `reports/tables/gse136103_secondary_validation_summary.csv`
+- `reports/figures/gse136103_blood_candidate_marker_heatmap.png`
+- `reports/figures/gse136103_mouse_candidate_ortholog_heatmap.png`
+
+Interpretation:
+
+- Blood checks whether candidates are broad circulating markers. LST1 and TIMP1 are detectable, while most stromal, endothelial, and collagen candidates are low or absent.
+- Mouse liver checks ortholog conservation. Fibrotic mouse liver shows strong directionality for macrophage-state orthologs. Stromal candidates are present but weaker in this two-sample screen.

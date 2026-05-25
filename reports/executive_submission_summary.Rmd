@@ -28,6 +28,9 @@ pseudobulk <- read_table("pseudobulk_priority_gene_de.csv")
 pathways <- read_table("hallmark_pathway_enrichment.csv")
 gse244 <- read_table("gse244832_focused_object_candidate_summary.csv")
 gse207 <- read_table("validation_gse207310_candidate_lm_results.csv")
+blood_role <- read_table("gse136103_blood_candidate_marker_role_summary.csv")
+mouse_ortholog <- read_table("gse136103_mouse_candidate_ortholog_summary.csv")
+secondary_validation <- read_table("gse136103_secondary_validation_summary.csv")
 qc <- read_table("qc_filtered_by_library_compartment.csv")
 nextflow_qc <- readr::read_csv(file.path(root, "reports", "nextflow_demo", "demo_qc_summary.csv"), show_col_types = FALSE)
 ```
@@ -62,7 +65,7 @@ The project is organized as a small discovery pipeline rather than a single anal
 
 The primary dataset is **GSE136103**, a human liver scRNA-seq study of healthy and cirrhotic tissue. The workflow downloads the public GEO archive, builds a sample manifest, and separates samples by species, tissue source, disease state, donor, and fraction.
 
-For the primary contrast, I used human liver tissue and excluded blood and mouse samples. That keeps the discovery question focused: healthy versus cirrhotic human liver.
+For the primary contrast, I used human liver tissue and excluded blood and mouse samples. That keeps the discovery question focused: healthy versus cirrhotic human liver. Blood and mouse libraries are now used downstream as secondary validation checks: blood for circulating marker specificity, mouse liver for ortholog conservation and preclinical directionality.
 
 ```{r qc-table}
 qc %>%
@@ -77,7 +80,7 @@ qc %>%
   kable()
 ```
 
-**Why this matters:** fibrosis analysis is sensitive to sample composition. If blood, mouse, or non-liver samples are mixed into the main contrast, the strongest signals may reflect tissue source or species rather than liver fibrosis.
+**Why this matters:** fibrosis analysis is sensitive to sample composition. If blood, mouse, or non-liver samples are mixed into the main contrast, the strongest signals may reflect tissue source or species rather than liver fibrosis. Keeping them out of the discovery contrast and bringing them back for validation gives a cleaner biological question and a stronger translational read.
 
 ## QC And Preprocessing
 
@@ -246,6 +249,47 @@ Result:
 - SMOC2 is higher in NASH versus NAFL in the candidate-level model.
 - COL1A1, COL3A1, TIMP1, and PLVAP also show NASH directionality.
 - This is bulk tissue, so it supports directionality but not cell-of-origin by itself.
+
+### GSE136103 Blood And Mouse Secondary Validation
+
+The excluded GSE136103 blood and mouse libraries were analyzed as validation modules rather than mixed into the primary contrast.
+
+```{r secondary-validation}
+secondary_validation %>% kable()
+```
+
+Human blood asks a practical specificity question: are priority candidates broad circulating markers, or are they more liver-niche biased? LST1 and TIMP1 are detectable in blood, which is expected for myeloid and injury-remodeling biology. Most stromal, endothelial, and matrix candidates, including SMOC2, COL1A1, COL3A1, PDGFRA, PLVAP, and ACKR1, are low or absent across the four blood libraries.
+
+```{r blood-validation}
+blood_role %>%
+  select(validation_role, gene, samples, mean_log_normalized_expression, mean_pct_detected) %>%
+  arrange(desc(mean_log_normalized_expression)) %>%
+  datatable(options = list(pageLength = 16, scrollX = TRUE))
+```
+
+```{r blood-figure, out.width="62%"}
+knitr::include_graphics(file.path(figures, "gse136103_blood_candidate_marker_heatmap.png"))
+```
+
+Mouse liver asks a different question: are the human candidate genes conserved enough to support preclinical follow-up? The module maps human genes to mouse orthologs with `babelgene`, then compares the one healthy and one fibrotic mouse liver sample. This is a conservation and directionality screen, not a differential-expression claim.
+
+```{r mouse-validation}
+mouse_ortholog %>%
+  select(human_gene, mouse_gene, validation_role, fibrotic_vs_healthy_delta, pct_detected_delta, interpretation) %>%
+  arrange(desc(fibrotic_vs_healthy_delta)) %>%
+  datatable(options = list(pageLength = 16, scrollX = TRUE))
+```
+
+```{r mouse-figure, out.width="62%"}
+knitr::include_graphics(file.path(figures, "gse136103_mouse_candidate_ortholog_heatmap.png"))
+```
+
+Result:
+
+- Blood supports the specificity story for stromal and endothelial candidates: they are not simply high everywhere in circulation.
+- TIMP1 is detectable in blood, so it remains attractive as an assayable marker but needs context-aware interpretation.
+- Mouse fibrotic liver shows strong directionality for macrophage-state orthologs such as Trem2, Spp1, Gpnmb, Cd9, and complement genes.
+- Mouse stromal candidates are present but weaker in this small comparison. That keeps PDGFRA/B, SMOC2, and collagen candidates in the preclinical queue, but does not by itself prove model fidelity.
 
 ## Infrastructure And Reproducibility
 

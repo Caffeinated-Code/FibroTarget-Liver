@@ -1,0 +1,17 @@
+validation_role,gene,samples,mean_log_normalized_expression,mean_pct_detected
+circulating_myeloid_context,LST1,4,1.3343463199399679,55.48370969280478
+secreted_matrix_remodeling,TIMP1,4,0.6619917796061532,40.101818303370415
+macrophage_state_marker,CD9,4,0.038048120039337725,2.7013580814840896
+macrophage_complement_context,C1QA,4,0.026110274992265804,1.7678401145062455
+stromal_receptor_target,PDGFRB,4,0.007210303549415873,0.5147877528961029
+macrophage_complement_context,C1QB,4,0.005130200286359322,0.3417686805349109
+macrophage_state_marker,GPNMB,4,0.003561616836668437,0.26947837432570065
+scar_endothelial_marker,PLVAP,4,0.002572164891081649,0.21862483537229
+macrophage_complement_context,C1QC,4,0.002495051662545635,0.1670326563328864
+fibrosis_burden,COL1A1,4,8.068243074285524e-4,0.05814926684975656
+stromal_receptor_target,PDGFRA,4,6.312585953687165e-4,0.03806519942244524
+macrophage_state_marker,TREM2,4,4.931101241608432e-4,0.041741162259420594
+secreted_stromal_biomarker,SMOC2,4,3.4047602948941326e-5,0.003537568982595161
+fibrosis_burden,COL3A1,4,0,0
+macrophage_state_marker,SPP1,4,0,0
+scar_endothelial_marker,ACKR1,4,0,0

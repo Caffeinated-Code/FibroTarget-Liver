@@ -2,7 +2,7 @@
 
 **FibroTarget-Liver** is a reproducible single-cell target-discovery workflow for human liver fibrosis, MASH, and cirrhosis. It starts from public count matrices, runs a Seurat-based analysis, validates candidate targets against external liver disease datasets, enriches targets with public evidence, and packages the results as tables, figures, reports, and a Shiny dashboard.
 
-The primary analysis uses **GSE136103**, the Ramachandran et al. human cirrhosis single-cell RNA-seq dataset. Validation support uses **GSE244832** for MASH/HSC target evidence and **GSE207310** for bulk NAFLD/NASH biomarker directionality.
+The primary analysis uses **GSE136103**, the Ramachandran et al. human cirrhosis single-cell RNA-seq dataset. Validation support uses **GSE244832** for MASH/HSC target evidence, **GSE207310** for bulk NAFLD/NASH biomarker directionality, and the excluded GSE136103 blood and mouse libraries for marker specificity and preclinical conservation checks.
 
 ## Start Here
 
@@ -63,6 +63,11 @@ Top candidates include:
 
 The main interpretation is deliberately conservative: a strong fibrosis marker is not automatically a good therapeutic target. Matrix genes are useful biomarkers and pharmacodynamic markers, while receptor, surface, secreted, or enzyme candidates require additional validation for specificity, safety, conservation, and perturbation response.
 
+Secondary validation now adds two practical checks:
+
+- Human blood libraries show that most stromal, endothelial, and collagen candidates are low or absent in circulation, while TIMP1 and myeloid markers need context-aware interpretation.
+- Mouse liver libraries show ortholog-aware fibrotic directionality, strongest for macrophage-state candidates, with weaker stromal signal in the small two-sample mouse screen.
+
 ## Reproduce Locally
 
 Requirements:
@@ -96,6 +101,9 @@ make pseudobulk
 make prioritize
 make validation
 make hsc-validation
+make gse244832-focused
+make gse207310-validation
+make secondary-validation
 make evidence
 make translational-evidence
 make dashboard
@@ -170,6 +178,7 @@ Large data are expected to live in local ignored directories for this repo and i
 - Cell-level differential expression is retained for exploration; donor-level pseudobulk outputs are now the main inferential tables.
 - GSE244832 now has both streamed HSC-like validation summaries and a focused Seurat object reanalysis. Full all-gene object reanalysis remains better suited to AWS.
 - GSE207310 now has symbol-level computed validation with Ensembl mapping and phenotype metadata.
+- GSE136103 blood and mouse libraries are now analyzed as secondary validation modules, not mixed into the primary human liver disease contrast.
 - A standalone Nextflow demo subproject runs locally with the tracked demo dataset and writes results to `reports/nextflow_demo/`.
 
 ## References

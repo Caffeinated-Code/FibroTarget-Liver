@@ -41,6 +41,10 @@ datasets:
     reference_object_note: >
       Published Seurat object from Edinburgh DataShare may be used as an
       annotation/QC reference, but count matrices remain the reproducible input.
+    secondary_validation_note: >
+      Human blood and mouse liver libraries are excluded from the primary human
+      liver contrast, then analyzed separately for circulating marker specificity
+      and mouse ortholog/preclinical directionality.
   validation:
     - accession: GSE244832
       priority: 1

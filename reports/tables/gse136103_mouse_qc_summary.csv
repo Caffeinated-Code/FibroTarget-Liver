@@ -1,0 +1,3 @@
+sample_id,tissue,disease_state,cells,median_detected_genes,median_umis,median_percent_mito
+mouse_fibrotic,mouse_liver,fibrotic,3146,1952,5872.5,3.7426000013584835
+mouse_healthy,mouse_liver,healthy,2755,1908,5475,2.668878166465621

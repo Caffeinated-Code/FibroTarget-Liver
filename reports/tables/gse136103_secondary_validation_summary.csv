@@ -1,0 +1,3 @@
+validation_layer,samples,cells,role,main_caveat
+human_blood,4,30764,Checks whether candidate markers also appear in circulating immune cells or remain liver-niche biased.,Blood libraries do not define liver fibrosis state and are not used in the primary disease contrast.
+mouse_liver,2,5901,Checks ortholog presence and fibrotic versus healthy directionality for preclinical model relevance.,"Only one healthy and one fibrotic mouse sample are available, so this is a conservation screen, not inferential DE."

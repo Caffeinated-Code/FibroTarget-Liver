@@ -24,8 +24,10 @@ Open these first:
 5. `reports/tables/pseudobulk_priority_gene_de.csv`
 6. `reports/tables/gse244832_focused_object_candidate_summary.csv`
 7. `reports/tables/validation_gse207310_candidate_lm_results.csv`
-8. `nextflow/fibrotarget_demo/README.md`
-9. `reports/nextflow_demo/demo_run_summary.md`
+8. `reports/tables/gse136103_mouse_candidate_ortholog_summary.csv`
+9. `reports/tables/gse136103_blood_candidate_marker_role_summary.csv`
+10. `nextflow/fibrotarget_demo/README.md`
+11. `reports/nextflow_demo/demo_run_summary.md`
 
 ## Data Sources And Download Instructions
 
@@ -63,6 +65,16 @@ Validation dataset 2:
 make gse207310-validation
 ```
 
+Secondary validation inside GSE136103:
+
+- Human blood libraries: marker specificity and circulating immune context
+- Mouse liver libraries: ortholog conservation and preclinical directionality
+- Repo script:
+
+```bash
+make secondary-validation
+```
+
 Standalone demo:
 
 ```bash
@@ -80,7 +92,7 @@ Demo outputs:
 
 What to say:
 
-> I built this as an end-to-end liver fibrosis single-cell target discovery workflow. The analysis starts with GSE136103, identifies fibrosis-associated cell states, runs donor-aware differential expression, performs pathway analysis, ranks biomarker and target candidates, validates priority candidates in GSE244832 and GSE207310, and packages the results as tables, figures, an HTML report, a Shiny dashboard, and a local/AWS Nextflow demo.
+> I built this as an end-to-end liver fibrosis single-cell target discovery workflow. The analysis starts with GSE136103, identifies fibrosis-associated cell states, runs donor-aware differential expression, performs pathway analysis, ranks biomarker and target candidates, validates priority candidates in GSE244832 and GSE207310, uses the excluded GSE136103 blood and mouse libraries for specificity and conservation checks, and packages the results as tables, figures, an HTML report, a Shiny dashboard, and a local/AWS Nextflow demo.
 
 Then show:
 
@@ -122,7 +134,7 @@ Answer:
 
 What to say:
 
-> The primary dataset was specified by the assignment: GSE136103. I used it for discovery because it directly profiles healthy and cirrhotic human liver at single-cell resolution. I used GSE244832 for validation because it is MASLD/MASH-focused and HSC-centered. I used GSE207310 because it gives bulk liver RNA-seq support for NAFLD/NASH directionality and SMOC2 biology.
+> The primary dataset was GSE136103. I used human liver libraries for discovery because they directly profile healthy and cirrhotic human liver at single-cell resolution. I kept blood and mouse out of the primary contrast to avoid tissue and species confounding, then analyzed them separately. Blood tests whether markers are also broad circulating signals. Mouse tests whether candidate orthologs show preclinical directionality. I used GSE244832 because it is MASLD/MASH-focused and HSC-centered. I used GSE207310 because it gives bulk liver RNA-seq support for NAFLD/NASH directionality and SMOC2 biology.
 
 Then show:
 
@@ -132,6 +144,10 @@ Then show:
 Caveat:
 
 > Cirrhosis and MASH fibrosis overlap but are not identical. I treat GSE244832 and GSE207310 as validation and directionality checks, not as proof that every cirrhosis-derived candidate is a MASH therapeutic target.
+
+Blood and mouse caveat:
+
+> The blood module is a specificity check, not a liver disease contrast. The mouse module is a conservation screen, not inferential DE, because there is one healthy and one fibrotic mouse sample.
 
 ## Section 4: Preprocessing And QC
 
@@ -223,11 +239,27 @@ Show:
 - `reports/tables/validation_gse207310_candidate_lm_results.csv`
 - `reports/figures/gse207310_candidate_validation_heatmap.png`
 
+GSE136103 blood and mouse:
+
+> I brought back the excluded blood and mouse samples after the primary analysis. Blood helps identify markers that may appear in circulation. Mouse checks ortholog conservation and preclinical directionality without mixing species into the main discovery model.
+
+Show:
+
+- `workflow/13_validate_blood_mouse_markers.R`
+- `reports/tables/gse136103_blood_candidate_marker_role_summary.csv`
+- `reports/tables/gse136103_mouse_candidate_ortholog_summary.csv`
+- `reports/figures/gse136103_blood_candidate_marker_heatmap.png`
+- `reports/figures/gse136103_mouse_candidate_ortholog_heatmap.png`
+
+Key interpretation:
+
+> TIMP1 and LST1 are detectable in blood, so they need context-aware interpretation. SMOC2, collagen, PDGFRA, PLVAP, and ACKR1 are low or absent in blood, which supports tissue-niche specificity. In mouse fibrotic liver, macrophage-state orthologs show the strongest directionality, while stromal candidates are present but weaker in this small preclinical screen.
+
 ## Section 9: Beyond Scope
 
 What to say:
 
-> Beyond the assignment, I added donor-level pseudobulk, reference-informed labels, GSE244832 focused object validation, GSE207310 symbol-level validation, target evidence enrichment, a Shiny dashboard, a rendered HTML report, Docker/renv, and a standalone Nextflow demo that runs locally and maps to AWS.
+> Beyond the assignment, I added donor-level pseudobulk, reference-informed labels, GSE244832 focused object validation, GSE207310 symbol-level validation, blood and mouse secondary validation, target evidence enrichment, a Shiny dashboard, a rendered HTML report, Docker/renv, and a standalone Nextflow demo that runs locally and maps to AWS.
 
 Then show:
 
@@ -240,7 +272,7 @@ Then show:
 
 What to say:
 
-> The remaining limitations are specific and actionable. Full all-gene GSE244832 object analysis should run on AWS. Macrophage candidates need a macrophage-focused atlas. Spatial or protein validation is needed for scar-niche localization. Therapeutic nomination needs perturbation assays.
+> The remaining limitations are specific and actionable. Full all-gene GSE244832 object analysis should run on AWS. Mouse validation should be expanded beyond the two GSE136103 mouse libraries. Macrophage candidates need a macrophage-focused atlas. Spatial or protein validation is needed for scar-niche localization. Therapeutic nomination needs perturbation assays.
 
 Good closing:
 
