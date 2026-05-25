@@ -101,7 +101,7 @@ These signals are treated as triage evidence. ClinicalTrials.gov matches are bro
 
 ## Limitations
 
-This is a compact analysis, not a full production-grade discovery program.
+This compact analysis is designed for practical review and clear translational prioritization.
 
 - Cell-level DE is exploratory because cells from the same donor are not independent biological replicates.
 - Marker-score compartment calls recover the required broad compartments but do not replace full expert annotation.

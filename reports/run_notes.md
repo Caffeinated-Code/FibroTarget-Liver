@@ -11,9 +11,9 @@
 ## Decisions Made
 
 - Used GEO count matrices as the reproducible input.
-- Used GEO count matrices as the primary reproducible input and used the published Seurat object as an annotation reference, not as a substitute for processing.
+- Used GEO count matrices as the primary reproducible input and the published Seurat object as an annotation reference.
 - Excluded blood and mouse samples from the primary human liver discovery contrast.
-- Used marker-supported compartment calls for the required compartments rather than overclaiming full cell-type annotation.
+- Used marker-supported compartment calls for the required compartments and kept labels conservative.
 - Labeled Seurat cell-level DE as exploratory and added donor-level pseudobulk DE as the primary inferential layer.
 - Kept validation modular. GSE244832 was prepared and summarized for HSC/MASH validation, GSE207310 was staged for biomarker directionality, and SCP2154 remains a macrophage expansion path.
 - Added public target evidence from Open Targets, ClinicalTrials.gov, ClinVar, MyGene.info, UniProt, PubMed, and mouse orthology mapping.

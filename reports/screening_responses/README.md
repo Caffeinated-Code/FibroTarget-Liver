@@ -49,11 +49,11 @@ If donor count is small, I would report effect sizes, donor consistency, and con
 
 ## 06. AI/ML-Based Biomarker Prioritization
 
-I would not start with a black-box model. With 300 candidate genes and limited donors, a transparent scoring model is more useful and more defensible.
+With 300 candidate genes and limited donors, I would start with a transparent scoring model because it is interpretable, auditable, and easier to defend biologically.
 
 The model would score each candidate across disease effect size, donor consistency, cell-type specificity, pathway support, validation in external datasets, secreted or surface protein status, druggability, assayability, mouse conservation, and safety risk. Literature and public resources can add evidence, but they should not override weak primary data without being labeled as external support.
 
-If enough validation datasets are available, I would use ML for ranking stability or feature weighting, not as a magic classifier. For example, one could train models to distinguish fibrosis stage using pseudobulk cell-type signatures, then ask which genes consistently contribute across folds and datasets. The final list should still be reviewed biologically.
+If enough validation datasets are available, I would use ML for ranking stability or feature weighting. For example, one could train models to distinguish fibrosis stage using pseudobulk cell-type signatures, then ask which genes consistently contribute across folds and datasets. The final list should still be reviewed biologically.
 
 ## 07. Cell-Cell Communication And Mechanism Discovery
 

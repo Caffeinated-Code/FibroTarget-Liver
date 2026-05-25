@@ -25,7 +25,7 @@ For implementation details:
 
 ## What The Repository Is
 
-This is a **reference workflow and target-prioritization framework**, not a manuscript supplement dump.
+This repository presents **FibroTarget-Liver** as a reference workflow and target-prioritization framework for liver fibrosis discovery.
 
 It separates:
 

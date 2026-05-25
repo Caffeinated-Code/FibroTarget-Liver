@@ -35,7 +35,7 @@ Rscript -e "shiny::runApp('dashboard')"
 
 ## What To Look For
 
-- The workflow starts from GEO count matrices, not a hidden Seurat object.
+- The workflow starts from GEO count matrices as the reproducible primary input.
 - Metadata curation explicitly excludes blood and mouse samples from the primary human liver analysis.
 - Required fibrosis-relevant compartments are marker-validated.
 - Donor-level pseudobulk DE is available and should be favored over exploratory cell-level DE.

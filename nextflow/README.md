@@ -84,6 +84,6 @@ Tracked target evidence outputs:
 
 ## Current Status
 
-This is a scaffold, not a mature nf-core pipeline. The next engineering step is to turn each R/Python workflow into isolated containerized processes with explicit inputs and outputs rather than invoking the local `make` targets.
+The Nextflow layer is an AWS-oriented scaffold. The next engineering step is to turn each R/Python workflow into isolated containerized processes with explicit inputs and outputs, replacing local `make` orchestration inside each process.
 
 Local validation note: this machine does not currently have a usable Java runtime, so Nextflow itself was not executed here. The repository includes the scaffold and configuration, but a Java runtime is required before running `nextflow`.
