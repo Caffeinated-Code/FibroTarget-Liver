@@ -2,7 +2,7 @@ component,direction,max_points,rationale
 disease_association_points,positive,20,"Rewards cirrhosis-up genes with meaningful effect size and adjusted significance, using donor-aware support when available."
 donor_consistency_points,positive,18,Rewards signals that survive donor-level pseudobulk rather than only cell-level testing.
 specificity_points,positive,15,Rewards a higher fraction of expressing cells in cirrhotic versus healthy cells inside the intended compartment.
-pathway_points,positive,14,"Rewards genes coherent with fibrosis mechanisms such as matrix remodeling, PDGF signaling, scar endothelium, or macrophage injury states."
+pathway_points,positive,14,"Rewards genes present in pathfindR Reactome active-subnetwork terms from donor-level pseudobulk signatures, with curated fibrosis mechanism support as fallback."
 external_validation_points,positive,18,"Rewards directionality in GSE244832, GSE207310, and mouse ortholog checks."
 modality_points,positive,10,"Rewards secreted, surface, receptor, enzyme, or otherwise assayable proteins."
 conservation_points,positive,6,Rewards human-to-mouse orthology for preclinical feasibility.

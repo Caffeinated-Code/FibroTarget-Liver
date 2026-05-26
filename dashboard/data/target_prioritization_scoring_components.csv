@@ -9,8 +9,8 @@ rank,gene,candidate_class,clinical_use_case,total_score,disease_association_poin
 8,CD9,pharmacodynamic biomarker,scar-associated macrophage pharmacodynamic readout,65.81112053083551,18.41256017798649,5.358560352849022,2.0399999999999996,12,18,10,6,-6,0,0,broad tetraspanin expression limits target specificity
 9,TREM2,future validation marker,macrophage state stratification and perturbation studies,57.60562059195723,8.802810295978619,8.802810295978619,0,12,14,10,6,-2,0,0,macrophage biology can be protective or pathogenic depending on disease timing
 10,MMP2,future validation marker,matrix remodeling mechanism,51.69,20,0,3.6900000000000004,14,0,10,6,-2,0,0,matrix remodeling can be protective or harmful by context
-11,DCN,future validation marker,matrix biology validation,49.79,20,0,5.789999999999999,14,0,6,6,-2,0,0,context-dependent anti-fibrotic and pro-remodeling roles
-12,VWF,diagnostic biomarker,endothelial activation context marker,49.425,20,0,7.425000000000001,12,0,10,6,-6,0,0,broad vascular expression
+11,VWF,diagnostic biomarker,endothelial activation context marker,51.425,20,0,7.425000000000001,14,0,10,6,-6,0,0,broad vascular expression
+12,DCN,future validation marker,matrix biology validation,49.79,20,0,5.789999999999999,14,0,6,6,-2,0,0,context-dependent anti-fibrotic and pro-remodeling roles
 13,LUM,diagnostic biomarker,stromal matrix burden marker,48.394999999999996,20,0,4.3950000000000005,14,0,6,6,-2,0,0,matrix marker more than direct intervention point
 14,SMOC2,diagnostic biomarker,secreted diagnostic or pharmacodynamic marker,47.58815455997629,1.6745516836947199,0.38360287628156814,1.5299999999999998,14,16,10,6,-2,0,0,best positioned as biomarker before target
 15,THY1,pharmacodynamic biomarker,activated stromal and portal-fibroblast-like readout,42.28,20,0,5.28,7,0,10,6,-6,0,0,broad stromal expression

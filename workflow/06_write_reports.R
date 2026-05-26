@@ -22,6 +22,8 @@ required <- c(
   file.path(cfg$paths$tables_dir, "qc_filter_summary.csv"),
   file.path(cfg$paths$tables_dir, "qc_metric_summary.csv"),
   file.path(cfg$paths$tables_dir, "hallmark_pathway_enrichment.csv"),
+  file.path(cfg$paths$tables_dir, "pathfindr_pseudobulk_reactome_enrichment.csv"),
+  file.path(cfg$paths$tables_dir, "pathfindr_pseudobulk_run_summary.csv"),
   file.path(cfg$paths$tables_dir, "pseudobulk_priority_gene_de.csv"),
   file.path(cfg$paths$tables_dir, "gse244832_hsc_candidate_validation.csv"),
   file.path(cfg$paths$tables_dir, "gse244832_focused_object_candidate_summary.csv"),

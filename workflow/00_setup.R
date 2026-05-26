@@ -21,7 +21,7 @@ dir.create(cfg$paths$tables_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(cfg$paths$logs_dir, recursive = TRUE, showWarnings = FALSE)
 dir.create(cfg$paths$dashboard_data_dir, recursive = TRUE, showWarnings = FALSE)
 
-required <- c("yaml", "Matrix", "dplyr", "ggplot2", "readr", "Seurat", "SeuratObject", "shiny", "DT", "plotly")
+required <- c("yaml", "Matrix", "dplyr", "ggplot2", "readr", "Seurat", "SeuratObject", "shiny", "DT", "plotly", "pathfindR")
 optional <- c("clusterProfiler", "org.Hs.eg.db", "limma", "msigdbr", "patchwork", "ggrepel")
 
 pkg_status <- data.frame(
@@ -40,6 +40,16 @@ if (length(missing_required) > 0) {
 message("Runtime check complete.")
 message("R: ", R.version.string)
 message("Config: ", normalizePath(config_path))
+openjdk_bin <- "/opt/homebrew/opt/openjdk/bin"
+if (dir.exists(openjdk_bin) && !grepl(openjdk_bin, Sys.getenv("PATH"), fixed = TRUE)) {
+  Sys.setenv(PATH = paste(openjdk_bin, Sys.getenv("PATH"), sep = .Platform$path.sep))
+}
+java_status <- suppressWarnings(system2("java", "-version", stdout = TRUE, stderr = TRUE))
+if (!is.null(attr(java_status, "status")) && attr(java_status, "status") != 0) {
+  warning("Java was not detected on PATH. pathfindR and Nextflow require Java.")
+} else {
+  message("Java: available")
+}
 if (has_flag("--check-only")) {
   message("Check-only mode complete.")
 }

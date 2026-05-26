@@ -9,6 +9,7 @@ ENV RENV_PATHS_CACHE=/renv/cache
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
+    default-jre \
     git \
     libcurl4-openssl-dev \
     libfontconfig1-dev \
@@ -16,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libfribidi-dev \
     libharfbuzz-dev \
     libjpeg-dev \
+    libmagick++-dev \
     libpng-dev \
     libssl-dev \
     libtiff5-dev \

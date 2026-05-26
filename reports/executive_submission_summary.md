@@ -40,7 +40,9 @@ The published Ramachandran Seurat object is used as an annotation reference laye
 
 Cell-level DE is retained as an exploratory screen. Donor-level pseudobulk DE is the main inferential layer because donor, not cell, is the biological replicate.
 
-Pathway analysis summarizes disease-up programs by compartment. The current report includes Hallmark enrichment and pathfindR-style pathway visuals. A production extension would run pathfindR or ReactomePA from donor-level signatures and export active-subnetwork mechanism figures.
+Pathway analysis summarizes disease-up programs by compartment. The report includes Hallmark enrichment and a pathfindR Reactome active-subnetwork analysis from donor-level pseudobulk DE. pathfindR was added because it asks whether disease-up genes form connected protein-interaction modules before pathway enrichment, which is more useful for mechanism and target prioritization than a flat gene-list overlap alone.
+
+The pathfindR module ran on HSC/myofibroblast and endothelial pseudobulk states. HSC/myofibroblast terms were dominated by extracellular matrix organization, collagen formation, elastic fiber biology, collagen crosslinking, extracellular matrix degradation, and integrin interactions. Endothelial terms were also generated where donor-supported signal was sufficient. Macrophage states were not forced through pathfindR because the compact pseudobulk run did not produce enough cirrhosis-up macrophage genes at FDR < 0.05.
 
 ## Candidate Classes
 
@@ -77,6 +79,6 @@ The Nextflow demo reads a tracked 10x-style toy dataset, attaches metadata, comp
 1. Spatial and protein validation for SMOC2, TIMP1, PLVAP, ACKR1, PDGFRA/B, and macrophage-state markers.
 2. Full all-gene GSE244832 reanalysis on AWS.
 3. Macrophage-focused external atlas validation for TREM2, CD9, SPP1, and GPNMB.
-4. pathfindR or ReactomePA active mechanism module.
-5. LIANA, NicheNet, or CellChat communication analysis with donor and receiver-response filters.
+4. full pathfindR term clustering and ReactomePA comparison module.
+5. LIANA, NicheNet, or CellChat communication analysis with donor, receiver-response, and pathfindR-supported pathway filters.
 6. Perturbation assays before nominating therapeutic programs.

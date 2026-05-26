@@ -337,9 +337,22 @@ Bioinformatic filters I would apply:
 | donor-level support | prevents one donor or one cluster from driving the interaction |
 | cell-state specificity | removes generic housekeeping or pan-inflammatory signals |
 | receiver response | requires target genes or pathway activation in the receiving cell |
+| pathfindR or pathway support | asks whether receiver DE genes form connected active subnetworks, not just isolated marker changes |
 | spatial plausibility | ligand and receptor cells should be near each other when spatial data exist |
 | disease directionality | interaction should increase with fibrosis stage or disease activity |
 | perturbability | ligand, receptor, or pathway should be experimentally testable |
+
+I would use pathfindR after donor-aware pseudobulk DE, especially on receiver-cell signatures. For example, if macrophage ligands are predicted to activate HSCs, the receiver-side HSC pseudobulk DE should show connected Reactome or KEGG modules such as extracellular matrix organization, collagen formation, integrin signaling, TGF-beta-linked matrix remodeling, or PDGF-related activation. That does not prove the ligand caused the module, but it makes the hypothesis much more testable than a ligand-receptor edge alone.
+
+The workflow is:
+
+```text
+ligand-receptor prediction
+  -> receiver pseudobulk DE
+  -> pathfindR active-subnetwork enrichment
+  -> spatial proximity if available
+  -> perturb ligand or receptor in a controlled system
+```
 
 How I avoid overinterpretation:
 

@@ -24,7 +24,7 @@ The analysis covers the requested outcomes:
 | QC and preprocessing choices | `workflow/03_compact_analysis.R`, analysis walkthrough |
 | Major liver cell-type annotation | marker dot plot, refined labels, analysis walkthrough |
 | Fibrosis/cirrhosis-associated genes and states | pseudobulk DE tables, executive summary |
-| Pathway or mechanism analysis | Hallmark pathway table, pathfindR-style extension in walkthrough |
+| Pathway or mechanism analysis | Hallmark pathway table plus pathfindR Reactome active-subnetwork results from pseudobulk DE |
 | Rule-based biomarker prioritization | scoring method and ranked candidate tables |
 | Ranked 10-20 candidates | translational ranked candidate table and dashboard |
 | Translational relevance | executive summary, written responses, evidence-enriched tables |

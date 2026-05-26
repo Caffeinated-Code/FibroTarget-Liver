@@ -28,6 +28,8 @@ score_method <- read_table("target_prioritization_scoring_method.csv")
 score_components <- read_table("target_prioritization_scoring_components.csv")
 pseudobulk <- read_table("pseudobulk_priority_gene_de.csv")
 pathways <- read_table("hallmark_pathway_enrichment.csv")
+pathfindr_terms <- read_table("pathfindr_pseudobulk_reactome_enrichment.csv")
+pathfindr_summary <- read_table("pathfindr_pseudobulk_run_summary.csv")
 gse244 <- read_table("gse244832_focused_object_candidate_summary.csv")
 gse207 <- read_table("validation_gse207310_candidate_lm_results.csv")
 blood_role <- read_table("gse136103_blood_candidate_marker_role_summary.csv")
@@ -123,7 +125,7 @@ FibroTarget-Liver is a reproducible single-cell workflow for human liver fibrosi
 | Perform QC and preprocessing with choices explained | Complete | Seurat workflow, QC tables, method walkthrough |
 | Annotate major liver cell types and validate disease compartments | Complete | marker scores, dot plot, refined reference labels |
 | Identify fibrosis/cirrhosis-associated genes or cell states | Complete | cell-level screen plus donor-level pseudobulk DE |
-| Perform pathway or mechanism analysis | Complete | Hallmark enrichment and pathfindR extension plan |
+| Perform pathway or mechanism analysis | Complete | Hallmark enrichment plus pathfindR Reactome active-subnetwork analysis from pseudobulk DE |
 | Build AI/ML-assisted or rule-based prioritization score | Complete | transparent scoring model with positive evidence and penalties |
 | Produce ranked 10-20 candidates | Complete | ranked translational candidate table and dashboard filters |
 | Explain translational relevance | Complete | diagnostic, pharmacodynamic, therapeutic, and validation categories |
@@ -318,7 +320,40 @@ How to read the plots:
 - The dot plot shows the same results across compartments: dot size is overlap gene count and color is `-log10(FDR)`.
 - These plots show mechanism themes, not causal proof.
 
-A production extension would add pathfindR or ReactomePA on donor-level pseudobulk signatures. pathfindR is especially useful because it searches active subnetworks in a protein-interaction graph before pathway enrichment, which can produce mechanism figures that are easier to connect to target biology.
+### pathfindR From Pseudobulk Signatures
+
+pathfindR was added because the Hallmark table is a broad over-representation summary. It tells us which gene-set themes are enriched, but it does not ask whether the disease-up genes form connected, active regions in a protein-interaction network. For target discovery, that matters. A connected collagen-processing or endothelial-interaction module is more biologically interpretable than a loose list of genes that happen to overlap a pathway.
+
+The input to pathfindR is donor-level pseudobulk DE, not cell-level DE. For each refined cell state, the workflow uses genes that are higher in cirrhosis with FDR < 0.05, then runs Reactome active-subnetwork enrichment. This keeps the mechanism analysis tied to donor-supported biology.
+
+```{r pathfindr-summary}
+pathfindr_summary %>%
+  select(label, n_input_genes, status, reason, gene_sets, p_val_threshold, enrichment_threshold, grSubNum) %>%
+  datatable(filter = "top", options = dt_opts)
+```
+
+The macrophage pseudobulk states are intentionally not forced through pathfindR in this compact run because they do not have enough cirrhosis-up donor-level genes at FDR < 0.05. That is a result, not a failure: macrophage communication and mechanism claims need a stronger macrophage-specific donor signal or an external macrophage atlas before being treated as pathway-level evidence.
+
+```{r pathfindr-table}
+pathfindr_terms %>%
+  select(label, Term_Description, Fold_Enrichment, occurrence, support, lowest_p, n_up_genes, Up_regulated) %>%
+  arrange(label, lowest_p) %>%
+  group_by(label) %>%
+  slice_head(n = 8) %>%
+  ungroup() %>%
+  datatable(filter = "top", options = dt_opts) %>%
+  formatRound(c("Fold_Enrichment", "support", "lowest_p"), digits = 3)
+```
+
+```{r pathfindr-barplot, out.width="96%"}
+knitr::include_graphics(file.path(figures, "pathfindr_pseudobulk_reactome_barplot.png"))
+```
+<div class="caption">Figure: pathfindR Reactome enrichment from donor-level pseudobulk signatures. HSC/myofibroblast terms are dominated by extracellular matrix organization, collagen formation, collagen crosslinking, and integrin interactions. Endothelial terms capture vascular and extracellular remodeling biology where donor-supported signal is present.</div>
+
+```{r pathfindr-dotplot, out.width="96%"}
+knitr::include_graphics(file.path(figures, "pathfindr_pseudobulk_reactome_dotplot.png"))
+```
+<div class="caption">Figure: pathfindR active-subnetwork terms. Dot size is the number of up-regulated donor-level genes in the term, and color is enrichment strength. This view helps distinguish a statistically enriched pathway with broad support from a pathway driven by only a few genes.</div>
 
 ## Prioritization Score
 
@@ -541,7 +576,7 @@ Kept modest and practical:
 1. Spatial validation for SMOC2, TIMP1, PLVAP, ACKR1, PDGFRA/B, and macrophage-state markers.
 2. Full GSE244832 all-gene object reanalysis on AWS.
 3. Macrophage-focused atlas validation for TREM2, CD9, SPP1, and GPNMB.
-4. pathfindR or ReactomePA active mechanism module.
+4. full pathfindR term clustering and ReactomePA comparison module.
 5. LIANA, NicheNet, or CellChat communication analysis with donor and receiver-response filters.
 6. Perturbation assays before therapeutic nomination.
 

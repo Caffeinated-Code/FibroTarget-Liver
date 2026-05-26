@@ -53,6 +53,7 @@ make curate
 make analyze
 make refine-labels
 make pseudobulk
+make pathfindr
 make prioritize
 make validation
 make hsc-validation
@@ -76,6 +77,8 @@ make all
 
 - R 4.6.0
 - Seurat 5.5.0
+- pathfindR 2.6.0
+- Java/OpenJDK for pathfindR active-subnetwork search and Nextflow
 - `renv.lock` for package pinning
 - `Dockerfile` for containerized execution
 - Nextflow plus Java for local and AWS pipeline execution
@@ -104,6 +107,8 @@ Core tables:
 - `reports/tables/pseudobulk_de_by_refined_state.csv`
 - `reports/tables/pseudobulk_priority_gene_de.csv`
 - `reports/tables/hallmark_pathway_enrichment.csv`
+- `reports/tables/pathfindr_pseudobulk_run_summary.csv`
+- `reports/tables/pathfindr_pseudobulk_reactome_enrichment.csv`
 - `reports/tables/ranked_biomarker_target_candidates_translational.csv`
 - `reports/tables/target_prioritization_scoring_components.csv`
 - `reports/tables/target_prioritization_scoring_method.csv`
@@ -120,6 +125,8 @@ Core figures:
 - `reports/figures/required_compartment_marker_dotplot.png`
 - `reports/figures/umap_refined_cell_states.png`
 - `reports/figures/pseudobulk_priority_gene_de.png`
+- `reports/figures/pathfindr_pseudobulk_reactome_barplot.png`
+- `reports/figures/pathfindr_pseudobulk_reactome_dotplot.png`
 - `reports/figures/ranked_candidate_scores.png`
 - `reports/figures/gse244832_focused_object_validation_heatmap.png`
 - `reports/figures/gse207310_candidate_validation_heatmap.png`

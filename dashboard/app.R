@@ -18,6 +18,8 @@ umap <- read_dash("umap_metadata.csv")
 candidates <- read_dash("ranked_candidates.csv")
 de <- read_dash("de_results.csv")
 pathways <- read_dash("pathway_enrichment.csv")
+pathfindr_terms <- if (file.exists(file.path(data_dir, "pathfindr_pseudobulk_reactome_enrichment.csv"))) read_dash("pathfindr_pseudobulk_reactome_enrichment.csv") else tibble()
+pathfindr_summary <- if (file.exists(file.path(data_dir, "pathfindr_pseudobulk_run_summary.csv"))) read_dash("pathfindr_pseudobulk_run_summary.csv") else tibble()
 qc <- read_dash("qc_summary.csv")
 qc_decisions <- if (file.exists(file.path(data_dir, "qc_decision_log.csv"))) read_dash("qc_decision_log.csv") else tibble()
 qc_filter <- if (file.exists(file.path(data_dir, "qc_filter_summary.csv"))) read_dash("qc_filter_summary.csv") else tibble()
@@ -70,6 +72,7 @@ ui <- fluidPage(
         tabPanel("Reference Labels", DTOutput("refined_cluster_table")),
         tabPanel("Differential Expression", DTOutput("de_table")),
         tabPanel("Pathways", DTOutput("pathway_table")),
+        tabPanel("pathfindR", DTOutput("pathfindr_summary_table"), tags$hr(), DTOutput("pathfindr_table")),
         tabPanel("QC", DTOutput("qc_decision_table"), tags$hr(), DTOutput("qc_filter_table"), tags$hr(), DTOutput("qc_metric_table"), tags$hr(), DTOutput("qc_table"))
       )
     )
@@ -172,6 +175,20 @@ server <- function(input, output, session) {
         color = "white"
       ) |>
       formatRound(c("p_value", "p_adj"), digits = 3)
+  })
+
+  output$pathfindr_summary_table <- renderDT({
+    datatable(pathfindr_summary, filter = "top", options = dt_opts)
+  })
+
+  output$pathfindr_table <- renderDT({
+    datatable(pathfindr_terms, filter = "top", options = dt_opts) |>
+      formatStyle(
+        "mechanism_compartment",
+        backgroundColor = styleEqual(names(compartment_palette), unname(compartment_palette)),
+        color = "white"
+      ) |>
+      formatRound(c("Fold_Enrichment", "lowest_p", "highest_p", "support"), digits = 3)
   })
 
   output$qc_decision_table <- renderDT({

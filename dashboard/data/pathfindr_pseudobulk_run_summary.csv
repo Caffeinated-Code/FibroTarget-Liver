@@ -1,0 +1,5 @@
+refined_cell_state,mechanism_compartment,label,n_input_genes,status,reason,gene_sets,p_val_threshold,enrichment_threshold,grSubNum
+HSC_myofibroblast_reference_supported,mesenchymal_HSC_myofibroblast,HSC/myofibroblast,174,complete,33 enriched Reactome terms returned.,Reactome,0.05,0.1,100
+endothelial_reference_supported,endothelial,Endothelial,57,complete,38 enriched Reactome terms returned.,Reactome,0.05,0.1,100
+macrophage_reference_supported,macrophage_monocyte,Macrophage reference-supported,0,not_run,Fewer than 10 cirrhosis-up donor-level pseudobulk genes at FDR < 0.05.,Reactome,0.05,0.1,100
+macrophage_marker_supported,macrophage_monocyte,Macrophage marker-supported,0,not_run,Fewer than 10 cirrhosis-up donor-level pseudobulk genes at FDR < 0.05.,Reactome,0.05,0.1,100

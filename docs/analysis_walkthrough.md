@@ -256,9 +256,9 @@ Interpretation:
 
 Pathway enrichment is not proof of causality. It summarizes the biology that should guide validation.
 
-### pathfindR Extension
+### pathfindR From Pseudobulk DE
 
-For a production mechanism module, pathfindR fits this analysis well because it searches active subnetworks in protein interaction space before pathway enrichment.
+pathfindR is now included as a donor-level mechanism module. It fits this analysis because it searches for active subnetworks in protein-interaction space before pathway enrichment. That is more useful for target prioritization than a flat pathway overlap, because connected disease-up genes are easier to interpret as a biological module.
 
 ```mermaid
 flowchart LR
@@ -270,11 +270,26 @@ flowchart LR
   F --> G["Mechanism figure and target rationale"]
 ```
 
-How to use it:
+How it is used here:
 
-- run separately for stromal, macrophage, and endothelial pseudobulk signatures
-- compare against Hallmark results
-- keep pathways only when they align with donor-level DE and known liver fibrosis biology
+- input is donor-level pseudobulk DE, not cell-level DE
+- only cirrhosis-up genes with FDR < 0.05 are used
+- Reactome terms are tested from active subnetworks
+- HSC/myofibroblast and endothelial states have enough genes to run
+- macrophage states are not forced because they do not have enough donor-supported cirrhosis-up genes in this compact run
+
+Outputs:
+
+- [reports/tables/pathfindr_pseudobulk_run_summary.csv](../reports/tables/pathfindr_pseudobulk_run_summary.csv)
+- [reports/tables/pathfindr_pseudobulk_reactome_enrichment.csv](../reports/tables/pathfindr_pseudobulk_reactome_enrichment.csv)
+- [reports/figures/pathfindr_pseudobulk_reactome_barplot.png](../reports/figures/pathfindr_pseudobulk_reactome_barplot.png)
+- [reports/figures/pathfindr_pseudobulk_reactome_dotplot.png](../reports/figures/pathfindr_pseudobulk_reactome_dotplot.png)
+
+Result:
+
+- HSC/myofibroblast pseudobulk DE strongly supports extracellular matrix organization, collagen formation, collagen biosynthesis/modification, elastic fiber biology, collagen crosslinking, extracellular matrix degradation, and integrin interactions.
+- Endothelial pseudobulk DE produces donor-supported Reactome terms where the vascular remodeling signature is sufficient.
+- Macrophage mechanisms should be pursued with a stronger macrophage-specific atlas or validation dataset, rather than overinterpreting weak local pseudobulk signal.
 
 ## 9. Biomarker And Target Prioritization
 
@@ -413,7 +428,7 @@ Most useful follow-up work:
 1. Spatial validation for SMOC2, TIMP1, PLVAP, ACKR1, PDGFRA/B, and macrophage-state markers.
 2. Full GSE244832 all-gene object reanalysis on AWS.
 3. Macrophage-focused atlas validation for TREM2, CD9, SPP1, and GPNMB.
-4. pathfindR or ReactomePA active mechanism module.
+4. full pathfindR term clustering and ReactomePA comparison module.
 5. LIANA, NicheNet, or CellChat communication module with donor and receiver-response filters.
 6. Perturbation experiments before therapeutic nomination.
 

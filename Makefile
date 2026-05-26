@@ -1,7 +1,7 @@
 CONFIG ?= config/project.yaml
 R ?= Rscript
 
-.PHONY: help setup check fetch-data curate analyze refine-labels pseudobulk prioritize validation hsc-validation gse244832-focused gse207310-validation secondary-validation evidence translational-evidence demo dashboard report render-summary validate-repo nextflow-demo all clean
+.PHONY: help setup check fetch-data curate analyze refine-labels pseudobulk pathfindr prioritize validation hsc-validation gse244832-focused gse207310-validation secondary-validation evidence translational-evidence demo dashboard report render-summary validate-repo nextflow-demo all clean
 
 help:
 	@echo "Targets:"
@@ -11,6 +11,7 @@ help:
 	@echo "  make analyze      Run compact local analysis"
 	@echo "  make refine-labels Refine labels using the published Seurat reference"
 	@echo "  make pseudobulk   Run donor-level pseudobulk DE by refined state"
+	@echo "  make pathfindr    Run pathfindR mechanism analysis from pseudobulk DE"
 	@echo "  make prioritize   Build ranked target and biomarker evidence tables"
 	@echo "  make validation   Prepare compact validation summaries"
 	@echo "  make hsc-validation Run focused GSE244832 HSC/myofibroblast validation"
@@ -47,6 +48,9 @@ refine-labels:
 
 pseudobulk:
 	$(R) workflow/08_pseudobulk_de.R --config $(CONFIG)
+
+pathfindr:
+	PATH="/opt/homebrew/opt/openjdk/bin:$$PATH" JAVA_HOME="/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home" $(R) workflow/14_pathfindr_pseudobulk.R --config $(CONFIG)
 
 prioritize:
 	$(R) workflow/04_prioritize_targets.R --config $(CONFIG)
@@ -93,7 +97,7 @@ nextflow-demo:
 validate-repo:
 	python3 scripts/validate_repo_structure.py
 
-all: check fetch-data curate analyze refine-labels pseudobulk prioritize validation hsc-validation gse244832-focused gse207310-validation secondary-validation evidence translational-evidence dashboard report render-summary
+all: check fetch-data curate analyze refine-labels pseudobulk pathfindr prioritize validation hsc-validation gse244832-focused gse207310-validation secondary-validation evidence translational-evidence dashboard report render-summary
 
 clean:
 	rm -rf data/processed reports/tables reports/figures reports/qc dashboard/data logs

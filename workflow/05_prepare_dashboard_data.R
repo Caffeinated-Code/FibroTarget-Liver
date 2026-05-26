@@ -28,6 +28,8 @@ copy_if_exists(file.path(cfg$paths$tables_dir, "pseudobulk_priority_gene_de.csv"
 copy_if_exists(file.path(cfg$paths$tables_dir, "gse244832_hsc_candidate_validation.csv"), file.path(cfg$paths$dashboard_data_dir, "gse244832_hsc_candidate_validation.csv"))
 copy_if_exists(file.path(cfg$paths$tables_dir, "refined_cluster_annotations.csv"), file.path(cfg$paths$dashboard_data_dir, "refined_cluster_annotations.csv"))
 copy_if_exists(file.path(cfg$paths$tables_dir, "hallmark_pathway_enrichment.csv"), file.path(cfg$paths$dashboard_data_dir, "pathway_enrichment.csv"))
+copy_if_exists(file.path(cfg$paths$tables_dir, "pathfindr_pseudobulk_reactome_enrichment.csv"), file.path(cfg$paths$dashboard_data_dir, "pathfindr_pseudobulk_reactome_enrichment.csv"))
+copy_if_exists(file.path(cfg$paths$tables_dir, "pathfindr_pseudobulk_run_summary.csv"), file.path(cfg$paths$dashboard_data_dir, "pathfindr_pseudobulk_run_summary.csv"))
 copy_if_exists(file.path(cfg$paths$tables_dir, "qc_filtered_by_library_compartment.csv"), file.path(cfg$paths$dashboard_data_dir, "qc_summary.csv"))
 copy_if_exists(file.path(cfg$paths$tables_dir, "qc_decision_log.csv"), file.path(cfg$paths$dashboard_data_dir, "qc_decision_log.csv"))
 copy_if_exists(file.path(cfg$paths$tables_dir, "qc_filter_summary.csv"), file.path(cfg$paths$dashboard_data_dir, "qc_filter_summary.csv"))

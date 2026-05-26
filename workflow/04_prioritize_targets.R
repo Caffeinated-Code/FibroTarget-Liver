@@ -30,6 +30,8 @@ blood_path <- file.path(tables_dir, "gse136103_blood_candidate_marker_role_summa
 blood <- if (file.exists(blood_path)) read_csv(blood_path, show_col_types = FALSE) else tibble()
 mouse_path <- file.path(tables_dir, "gse136103_mouse_candidate_ortholog_summary.csv")
 mouse <- if (file.exists(mouse_path)) read_csv(mouse_path, show_col_types = FALSE) else tibble()
+pathfindr_path <- file.path(tables_dir, "pathfindr_pseudobulk_reactome_enrichment.csv")
+pathfindr <- if (file.exists(pathfindr_path)) read_csv(pathfindr_path, show_col_types = FALSE) else tibble()
 blood_detected_high <- if (nrow(blood) > 0) blood$gene[blood$mean_pct_detected >= 20] else character()
 blood_allowed_context <- c("TIMP1", "LST1", "C1QA", "C1QB", "C1QC")
 
@@ -59,6 +61,31 @@ manual_evidence <- tibble::tribble(
 )
 
 score_cap <- function(x, cap) pmin(cap, pmax(0, x))
+
+pathfindr_gene_support <- if (nrow(pathfindr) > 0) {
+  pathfindr |>
+    filter(!is.na(Up_regulated), Up_regulated != "") |>
+    select(mechanism_compartment, Term_Description, Fold_Enrichment, lowest_p, Up_regulated) |>
+    tidyr::separate_longer_delim(Up_regulated, delim = ",") |>
+    mutate(gene = trimws(Up_regulated)) |>
+    group_by(gene, mechanism_compartment) |>
+    summarise(
+      pathfindr_terms = n_distinct(Term_Description),
+      pathfindr_best_p = min(lowest_p, na.rm = TRUE),
+      pathfindr_top_term = Term_Description[which.min(lowest_p)][[1]],
+      pathfindr_max_fold_enrichment = max(Fold_Enrichment, na.rm = TRUE),
+      .groups = "drop"
+    )
+} else {
+  tibble(
+    gene = character(),
+    mechanism_compartment = character(),
+    pathfindr_terms = integer(),
+    pathfindr_best_p = double(),
+    pathfindr_top_term = character(),
+    pathfindr_max_fold_enrichment = double()
+  )
+}
 
 pseudobulk_support <- pseudobulk |>
   filter(gene %in% manual_evidence$gene) |>
@@ -124,12 +151,15 @@ candidate_base <- de_ranked |>
     disease_points = coalesce(disease_points, 0)
   ) |>
   left_join(pseudobulk_support, by = "gene") |>
+  left_join(pathfindr_gene_support, by = c("gene", "intended_compartment" = "mechanism_compartment")) |>
   mutate(
     cell_level_disease_points = disease_points,
     specificity_points = coalesce(specificity_points, 0),
     donor_consistency_points = coalesce(donor_consistency_points, 0),
     disease_association_points = pmax(cell_level_disease_points, donor_consistency_points),
     pathway_points = case_when(
+      !is.na(pathfindr_terms) & pathfindr_terms >= 3 ~ 14,
+      !is.na(pathfindr_terms) & pathfindr_terms > 0 ~ 12,
       gene %in% c("COL1A1", "COL3A1", "ACTA2", "PDGFRB", "PDGFRA", "TIMP1", "LOXL2", "SERPINE1", "MMP2", "SMOC2", "LUM", "DCN") ~ 14,
       gene %in% c("TREM2", "CD9", "SPP1", "GPNMB", "PLVAP", "ACKR1", "VWF") ~ 12,
       TRUE ~ 7
@@ -188,6 +218,7 @@ candidate_base <- de_ranked |>
     external_validation_points, modality_points, conservation_points, safety_penalty,
     blood_specificity_penalty, therapeutic_penalty, avg_log2FC, p_val_adj, pct.1, pct.2,
     pseudobulk_cell_state, pseudobulk_log2FC, pseudobulk_p_adj, n_healthy_donors, n_cirrhotic_donors,
+    pathfindr_terms, pathfindr_best_p, pathfindr_top_term, pathfindr_max_fold_enrichment,
     translational_modality, model_conservation, literature_context, risk_note
   )
 
@@ -207,7 +238,7 @@ score_method <- tibble::tribble(
   "disease_association_points", "positive", 20, "Rewards cirrhosis-up genes with meaningful effect size and adjusted significance, using donor-aware support when available.",
   "donor_consistency_points", "positive", 18, "Rewards signals that survive donor-level pseudobulk rather than only cell-level testing.",
   "specificity_points", "positive", 15, "Rewards a higher fraction of expressing cells in cirrhotic versus healthy cells inside the intended compartment.",
-  "pathway_points", "positive", 14, "Rewards genes coherent with fibrosis mechanisms such as matrix remodeling, PDGF signaling, scar endothelium, or macrophage injury states.",
+  "pathway_points", "positive", 14, "Rewards genes present in pathfindR Reactome active-subnetwork terms from donor-level pseudobulk signatures, with curated fibrosis mechanism support as fallback.",
   "external_validation_points", "positive", 18, "Rewards directionality in GSE244832, GSE207310, and mouse ortholog checks.",
   "modality_points", "positive", 10, "Rewards secreted, surface, receptor, enzyme, or otherwise assayable proteins.",
   "conservation_points", "positive", 6, "Rewards human-to-mouse orthology for preclinical feasibility.",
