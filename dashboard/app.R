@@ -201,9 +201,18 @@ ui <- fluidPage(
       table.dataTable tbody td {
         vertical-align: top;
       }
+      .table-controls {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+        margin-bottom: 12px;
+      }
       @media (max-width: 900px) {
         .metric-row {
           grid-template-columns: repeat(2, minmax(140px, 1fr));
+        }
+        .table-controls {
+          grid-template-columns: 1fr;
         }
       }
       @media (max-width: 560px) {
@@ -233,22 +242,34 @@ ui <- fluidPage(
     sidebarPanel(
       class = "sidebar-panel",
       selectInput("color_by", "UMAP color", choices = color_choices, selected = if ("refined_cell_state" %in% color_choices) "refined_cell_state" else "compartment_call"),
-      selectInput("compartment", "DE compartment", choices = sort(unique(de$compartment))),
-      selectInput("candidate_class", "Candidate class", choices = c("All", class_choices), selected = "All"),
-      selectInput("clinical_use_case", "Clinical use case", choices = c("All", use_case_choices), selected = "All"),
       width = 3
     ),
     mainPanel(
       class = "main-panel",
       tabsetPanel(
         tabPanel("Overview", plotlyOutput("umap_plot", height = 590)),
-        tabPanel("Candidates", DTOutput("candidate_table")),
+        tabPanel(
+          "Candidates",
+          tags$div(
+            class = "table-controls",
+            selectInput("candidate_class", "Candidate class", choices = c("All", class_choices), selected = "All"),
+            selectInput("clinical_use_case", "Clinical use case", choices = c("All", use_case_choices), selected = "All")
+          ),
+          DTOutput("candidate_table")
+        ),
         tabPanel("Scoring", DTOutput("score_component_table"), tags$hr(), DTOutput("score_method_table")),
         tabPanel("Pseudobulk", DTOutput("pseudobulk_table")),
         tabPanel("HSC Validation", DTOutput("hsc_validation_table")),
         tabPanel("Blood And Mouse", DTOutput("blood_validation_table"), tags$hr(), DTOutput("mouse_validation_table")),
         tabPanel("Reference Labels", DTOutput("refined_cluster_table")),
-        tabPanel("Cell-Level DE", DTOutput("de_table")),
+        tabPanel(
+          "Cell-Level DE",
+          tags$div(
+            class = "table-controls",
+            selectInput("compartment", "DE compartment", choices = sort(unique(de$compartment)))
+          ),
+          DTOutput("de_table")
+        ),
         tabPanel("Pathways", DTOutput("pathway_table")),
         tabPanel("pathfindR", DTOutput("pathfindr_summary_table"), tags$hr(), DTOutput("pathfindr_table")),
         tabPanel("QC", DTOutput("qc_decision_table"), tags$hr(), DTOutput("qc_filter_table"), tags$hr(), DTOutput("qc_metric_table"), tags$hr(), DTOutput("qc_table"))
