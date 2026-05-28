@@ -1,6 +1,6 @@
 # Written Responses
 
-My working style is simple: protect the metadata, test biology at the donor level, and nominate targets only when the signal is coherent, assayable, conserved, and realistic to validate. Prior work in regulatory RNA and target prioritization made me careful about directionality, modality, and translational path, not just differential expression.
+The approach is to nominate targets only when the signal is coherent, assayable, conserved, and realistic to validate. 
 
 ## 01. Dataset Curation And Fibrosis-Stage Harmonization
 
