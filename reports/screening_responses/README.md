@@ -62,7 +62,7 @@ If microscopic or pathology review is available, I would use it to adjudicate di
 
 **Original question:** For human liver fibrosis scRNA-seq and snRNA-seq datasets, what QC steps would you apply, and how would you avoid removing biologically meaningful stressed or diseased cells while still removing poor-quality cells, doublets, ambient RNA, and batch artifacts?
 
-I would treat QC as a decision log, not a one-line filter. Liver disease samples are fragile, fatty, fibrotic, and inflammatory. Aggressive QC can remove exactly the stressed hepatocytes, activated stromal cells, and injury-associated macrophages we want to study.
+Liver disease samples are fragile, fatty, fibrotic, and inflammatory. Aggressive QC can remove exactly the stressed hepatocytes, activated stromal cells, and injury-associated macrophages we want to study.
 
 I would calculate the same core metrics for every dataset, then interpret thresholds by assay, tissue quality, cell type, and disease state.
 
@@ -79,7 +79,7 @@ I would calculate the same core metrics for every dataset, then interpret thresh
 | sample yield | failed prep or biased capture | inspect cells per donor, fraction, and disease group |
 | assay type | scRNA-seq versus snRNA-seq differs biologically and technically | keep as metadata and use in sensitivity analysis |
 
-For scRNA-seq, I would start with a low-gene filter around 200 genes, review mitochondrial percentage around 15-25 percent, and remove extreme high-gene or high-UMI cells only after checking whether they are true doublets. For snRNA-seq, mitochondrial percentage is less informative, intronic/nuclear signal matters more, and thresholds can be lower or shifted by chemistry. I would never copy scRNA-seq thresholds blindly onto snRNA-seq.
+For scRNA-seq, I would start with a low-gene filter around 200 genes, review mitochondrial percentage around 15-25 percent, and remove extreme high-gene or high-UMI cells only after checking whether they are true doublets. For snRNA-seq, mitochondrial percentage is less informative, intronic/nuclear signal matters more, and thresholds can be lower or shifted by chemistry. 
 
 Primary dataset example:
 
@@ -105,25 +105,15 @@ Doublets and ambient RNA:
 - Use SoupX, CellBender, or DecontX when ambient RNA is visible.
 - Do not remove every cell with mixed markers automatically in fibrotic tissue. Scar niches can contain doublets, but they can also contain tightly apposed vascular, stromal, and immune cells. I would inspect UMI burden, doublet score, and marker co-expression before removing them.
 
-The important principle is to separate filtering from annotation. Filtering removes cells that are technically unreliable. Annotation labels cells that are biologically unusual. Diseased, stressed, or activated cells belong in the analysis unless there is clear evidence they are technical artifacts.
+The important principle is to separate filtering from annotation. Annotation labels cells that are biologically unusual while Filtering removes cells that are technically unreliable. Diseased, stressed, or activated cells belong in the analysis unless there is clear evidence they are technical artifacts.
 
 ## 03. Integration Without Erasing Fibrosis Biology
 
 **Original question:** How would you integrate multiple liver fibrosis single-cell datasets while making sure batch correction does not remove real fibrosis-stage biology?
 
-I would first analyze each dataset separately. If a fibrosis program is not visible before integration, integration will not magically make it trustworthy.
+I would first analyze each dataset separately. If a fibrosis program is not visible before integration, integration will not drastically make it trustworthy.
 
 Then I would integrate for annotation and visualization, not for final DE. I would keep raw counts for pseudobulk DE and use integrated embeddings to align comparable cell types.
-
-Main risk:
-
-```text
-dataset A = mostly healthy
-dataset B = mostly F3/F4
-
-If we correct "dataset" too strongly,
-we may remove real fibrosis biology because dataset and disease are confounded.
-```
 
 How I would protect disease signal:
 
@@ -158,7 +148,7 @@ Normalization issues:
 
 The final rule:
 
-> Integration should help align equivalent cell types. It should not make F4 liver look healthy.
+> Integration should help align equivalent cell types and not make F4 liver look healthy.
 
 ## 04. Cell-Type Annotation And Validation In Fibrotic Liver
 
@@ -166,7 +156,7 @@ The final rule:
 
 I would not accept the automated label as final. That marker set says the cluster is fibrogenic and activated, but it does not prove a pure fibroblast subtype.
 
-I would treat this as partly a classification problem and partly a regression or continuum problem. Classification asks which stromal subtype the cells are closest to. Regression asks where each cell sits along HSC identity, portal-fibroblast identity, pericyte or mural identity, and myofibroblast activation axes. Fibrotic stromal biology often behaves more like a gradient than clean bins.
+I would treat this as partly a classification problem and partly a regression or continuum problem. Classification answers which stromal subtype the cells are closest to. Regression asks where each cell sits along HSC identity, portal-fibroblast identity, pericyte or mural identity, and myofibroblast activation axes. Fibrotic stromal biology often behaves more like a gradient than clean bins.
 
 I would break the question into layers:
 
@@ -219,7 +209,7 @@ My label would be conservative unless evidence is strong:
 
 > activated mesenchymal or HSC/myofibroblast-like state
 
-That label is honest. It tells the biology without pretending the compact analysis can cleanly separate HSCs, portal fibroblasts, pericytes, and myofibroblasts.
+This label honestly tells the biology without over reaching that the compact analysis can cleanly separate HSCs, portal fibroblasts, pericytes, and myofibroblasts.
 
 ## 05. Donor-Aware Differential Expression And Biomarker Discovery
 
@@ -255,9 +245,9 @@ macrophage cells
   -> test genes at donor level
 ```
 
-I would use edgeR, DESeq2, limma-voom, muscat, or dreamlet depending on dataset size and design. For multiple studies, dreamlet is attractive because it supports pseudobulk modeling with random effects and large-scale single-cell data.
+I would use edgeR, DESeq2, or limma-voom depending on dataset size and design. For multiple studies, dreamlet is attractive because it supports pseudobulk modeling with random effects and large-scale single-cell data.
 
-Cell-level DE still has a role. It is useful for screening and marker discovery. It should not be the final basis for target nomination.
+Cell-level DE still has a role. It is useful for screening and marker discovery but should not be the final basis for target nomination.
 
 ## 06. AI/ML-Based Biomarker Prioritization
 
@@ -265,7 +255,7 @@ Cell-level DE still has a role. It is useful for screening and marker discovery.
 
 I would start with a transparent scoring model, then add ML only when the data can support it.
 
-For a small donor dataset, a rule-based score is stronger than pretending a black-box model has learned biology. The score should include:
+For a small donor dataset, a rule-based score is stronger and intuitive than an ML black-box model. The score should include:
 
 - donor-level disease association
 - cell-type specificity
@@ -300,7 +290,7 @@ Where AI should not be overused:
 - Sequence models may add a regulatory-evidence column if we have relevant enhancers, ATAC peaks, variants, or promoter hypotheses.
 - They are not substitutes for donor-aware transcriptomics, protein localization, and perturbation assays.
 
-My final shortlist would come from the intersection of statistics, biology, modality, validation, and safety, not from one model score.
+My final shortlist would come from the intersection of statistics, biology, modality, validation, safety, and current players in this domain and not from one model score.
 
 ## 07. Cell-Cell Interaction And Pathway Mechanism Discovery
 
@@ -362,15 +352,14 @@ How I avoid overinterpretation:
 - A predicted interaction does not prove fibrosis causality.
 - Many ligand-receptor databases are incomplete or biased toward well-studied immune pathways.
 
-Wet-lab validation is what turns the prediction into a mechanism. I would test priority pairs in macrophage-HSC or endothelial-HSC co-culture, liver organoids, precision-cut liver slices, or mouse fibrosis models. A strong experiment would knock down or block the ligand in the sender cell, or the receptor in the receiver cell, then measure HSC activation, collagen production, TIMP1/SMOC2 expression, contractility, macrophage state, and endothelial activation. If blocking a predicted macrophage ligand reduces ACTA2, COL1A1, COL3A1, or TIMP1 in HSCs, the interaction becomes much more credible.
+Wet-lab validation turns the prediction into a mechanism. I would test priority pairs in macrophage-HSC or endothelial-HSC co-culture, liver organoids, precision-cut liver slices, or mouse fibrosis models. A strong experiment would knock down or block the ligand in the sender cell, or the receptor in the receiver cell, then measure HSC activation, collagen production, TIMP1/SMOC2 expression, contractility, macrophage state, and endothelial activation. If blocking a predicted macrophage ligand reduces ACTA2, COL1A1, COL3A1, or TIMP1 in HSCs, the interaction becomes much more credible.
 
-The final output would be a short ranked mechanism table, not a giant network: sender cell, ligand, receiver cell, receptor, receiver response, disease direction, spatial support, perturbation plan, and caveat.
 
 ## 08. Reproducible Pipeline And Delivery Plan
 
 **Original question:** If you were asked to deliver this project end-to-end in 12-16 weeks, what would your reproducible analysis pipeline look like? Describe the repository structure, tools, milestones, quality checks, and final deliverables.
 
-I would deliver it as a reproducible, parameterized workflow with one local command, a cloud execution path, and a living evidence layer that can keep the target-prioritization database current.
+I would deliver it as a reproducible, parameterized workflow with one local command, a cloud execution path, and a living current evidence layer that can keep the target-prioritization database real-time.
 
 Repository structure:
 
