@@ -4,7 +4,7 @@ FibroTarget-Liver is a reproducible single-cell workflow for human liver fibrosi
 
 The full interactive report is rendered at [executive_submission_summary.html](executive_submission_summary.html). This Markdown file is a compact companion for quick review.
 
-## TLDR
+## Executive View
 
 Primary discovery used GSE136103 human liver tissue. Blood and mouse libraries from the same study were excluded from the main contrast to avoid tissue and species confounding, then analyzed separately for marker specificity and preclinical conservation.
 
@@ -14,7 +14,7 @@ The main biological signal is a scar niche involving:
 - scar-associated endothelial remodeling
 - macrophage injury and repair states
 
-The strongest translational point is that fibrosis markers and therapeutic targets are not the same thing. COL1A1, COL3A1, and TIMP1 are strong scar-burden readouts. PDGFRA and PDGFRB are more plausible perturbation hypotheses, but safety and tissue selectivity are central. TREM2, CD9, SPP1, and GPNMB stay in the macrophage validation queue until spatial and macrophage-atlas evidence is stronger.
+The strongest translational point is simple: fibrosis markers and therapeutic targets are not the same thing. COL1A1, COL3A1, and TIMP1 are strong scar-burden readouts. PDGFRA and PDGFRB are more plausible perturbation hypotheses, but safety and tissue selectivity are central. TREM2, CD9, SPP1, and GPNMB stay in the macrophage validation queue until spatial and macrophage-atlas evidence is stronger.
 
 ## Analysis Outcomes
 
@@ -24,7 +24,7 @@ The strongest translational point is that fibrosis markers and therapeutic targe
 | QC and preprocessing | Complete | `workflow/03_compact_analysis.R`, `reports/tables/qc_decision_log.csv` |
 | Major liver cell-type annotation | Complete | `reports/figures/required_compartment_marker_dotplot.png`, `docs/analysis_walkthrough.md` |
 | Fibrosis/cirrhosis-associated genes and states | Complete | `reports/tables/compartment_de_cell_level_exploratory.csv`, `reports/tables/pseudobulk_de_by_refined_state.csv` |
-| Pathway or mechanism analysis | Complete | `reports/tables/hallmark_pathway_enrichment.csv`, pathway figures |
+| Pathway or mechanism analysis | Complete | Hallmark/EnrichR-style enrichment plus pathfindR pseudobulk Reactome figures |
 | Biomarker and target prioritization score | Complete | `reports/tables/target_prioritization_scoring_method.csv`, `reports/tables/target_prioritization_scoring_components.csv` |
 | Ranked 10-20 candidates | Complete | `reports/tables/ranked_biomarker_target_candidates_translational.csv` |
 | Translational interpretation | Complete | HTML report, dashboard, evidence-enriched target tables |
@@ -40,9 +40,9 @@ The published Ramachandran Seurat object is used as an annotation reference laye
 
 Cell-level DE is retained as an exploratory screen. Donor-level pseudobulk DE is the main inferential layer because donor, not cell, is the biological replicate.
 
-Pathway analysis summarizes disease-up programs by compartment. The report includes Hallmark enrichment and a pathfindR Reactome active-subnetwork analysis from donor-level pseudobulk DE. pathfindR was added because it asks whether disease-up genes form connected protein-interaction modules before pathway enrichment, which is more useful for mechanism and target prioritization than a flat gene-list overlap alone.
+Pathway analysis summarizes disease-up programs by compartment. Hallmark enrichment gives an EnrichR-style over-representation view of broad themes. pathfindR adds a second, donor-aware pathway layer from pseudobulk DE: it asks whether cirrhosis-up genes form connected protein-interaction modules before Reactome enrichment. That makes the mechanism readout more useful for target prioritization than a flat gene-list overlap alone.
 
-The pathfindR module ran on HSC/myofibroblast and endothelial pseudobulk states. HSC/myofibroblast terms were dominated by extracellular matrix organization, collagen formation, elastic fiber biology, collagen crosslinking, extracellular matrix degradation, and integrin interactions. Endothelial terms were also generated where donor-supported signal was sufficient. Macrophage states were not forced through pathfindR because the compact pseudobulk run did not produce enough cirrhosis-up macrophage genes at FDR < 0.05.
+The pathfindR module ran on HSC/myofibroblast and endothelial pseudobulk states, with bar plot and dot plot figures in the HTML report. HSC/myofibroblast terms were dominated by extracellular matrix organization, collagen formation, elastic fiber biology, collagen crosslinking, extracellular matrix degradation, and integrin interactions. Endothelial terms were also generated where donor-supported signal was sufficient. Macrophage states were not forced through pathfindR because the compact pseudobulk run did not produce enough cirrhosis-up macrophage genes at FDR < 0.05.
 
 ## Candidate Classes
 
@@ -79,6 +79,6 @@ The Nextflow demo reads a tracked 10x-style toy dataset, attaches metadata, comp
 1. Spatial and protein validation for SMOC2, TIMP1, PLVAP, ACKR1, PDGFRA/B, and macrophage-state markers.
 2. Full all-gene GSE244832 reanalysis on AWS.
 3. Macrophage-focused external atlas validation for TREM2, CD9, SPP1, and GPNMB.
-4. full pathfindR term clustering and ReactomePA comparison module.
+4. Full pathfindR term clustering and ReactomePA comparison module.
 5. LIANA, NicheNet, or CellChat communication analysis with donor, receiver-response, and pathfindR-supported pathway filters.
 6. Perturbation assays before nominating therapeutic programs.

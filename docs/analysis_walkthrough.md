@@ -143,9 +143,17 @@ Output:
 
 - [reports/tables/refined_cluster_annotations.csv](../reports/tables/refined_cluster_annotations.csv)
 
+The dashboard Reference Labels view joins these cluster annotations to the cell-level UMAP metadata and adds:
+
+- `cluster_cells`: number of cells in each Seurat cluster
+- `cluster_composition_pct`: percent of all displayed cells in that cluster
+- `healthy_pct` and `cirrhotic_pct`: disease composition within the cluster
+- `donors`: number of donors represented in the cluster
+
 Interpretation:
 
 - The reference helps prevent under-calling known fibrotic niche populations.
+- Cluster size and disease composition help distinguish a robust repeated state from a small or disease-skewed cluster that needs cautious interpretation.
 - The count matrices remain the reproducible input, so the work is not just a reuse of an RData object.
 
 ## 6. Compartment Identification
@@ -242,7 +250,7 @@ Caveats:
 
 ## 8. Pathway And Mechanism Analysis
 
-The current workflow uses Hallmark enrichment on compartment-specific cirrhosis-up genes. This keeps the mechanism layer interpretable.
+The workflow uses two complementary pathway views. The first is Hallmark over-representation analysis on compartment-specific cirrhosis-up genes. This is an EnrichR-style question: given a list of disease-up genes, which curated pathway sets are overrepresented? It is fast, transparent, and useful for broad mechanism themes.
 
 Output:
 
@@ -258,7 +266,7 @@ Pathway enrichment is not proof of causality. It summarizes the biology that sho
 
 ### pathfindR From Pseudobulk DE
 
-pathfindR is now included as a donor-level mechanism module. It fits this analysis because it searches for active subnetworks in protein-interaction space before pathway enrichment. That is more useful for target prioritization than a flat pathway overlap, because connected disease-up genes are easier to interpret as a biological module.
+pathfindR is the second pathway view. It adds value beyond EnrichR-style over-representation because it first asks whether donor-supported disease-up genes form connected active subnetworks in protein-interaction space, then tests pathway enrichment on those subnetworks. That is useful for target prioritization: a connected collagen-processing, matrix-remodeling, or vascular-remodeling module is more interpretable and experimentally actionable than a loose list of genes that happen to overlap the same pathway.
 
 ```mermaid
 flowchart LR
@@ -284,6 +292,14 @@ Outputs:
 - [reports/tables/pathfindr_pseudobulk_reactome_enrichment.csv](../reports/tables/pathfindr_pseudobulk_reactome_enrichment.csv)
 - [reports/figures/pathfindr_pseudobulk_reactome_barplot.png](../reports/figures/pathfindr_pseudobulk_reactome_barplot.png)
 - [reports/figures/pathfindr_pseudobulk_reactome_dotplot.png](../reports/figures/pathfindr_pseudobulk_reactome_dotplot.png)
+
+![pathfindR Reactome bar plot](../reports/figures/pathfindr_pseudobulk_reactome_barplot.png)
+
+The bar plot shows the strongest Reactome terms from pseudobulk disease-up signatures after the active-subnetwork step. This makes the HSC/myofibroblast matrix module easy to inspect.
+
+![pathfindR Reactome dot plot](../reports/figures/pathfindr_pseudobulk_reactome_dotplot.png)
+
+The dot plot shows both enrichment strength and the number of up-regulated pseudobulk genes supporting each term. This helps separate a pathway with broad donor-supported gene evidence from one driven by only a few genes.
 
 Result:
 
@@ -428,7 +444,7 @@ Most useful follow-up work:
 1. Spatial validation for SMOC2, TIMP1, PLVAP, ACKR1, PDGFRA/B, and macrophage-state markers.
 2. Full GSE244832 all-gene object reanalysis on AWS.
 3. Macrophage-focused atlas validation for TREM2, CD9, SPP1, and GPNMB.
-4. full pathfindR term clustering and ReactomePA comparison module.
+4. Full pathfindR term clustering and ReactomePA comparison module.
 5. LIANA, NicheNet, or CellChat communication module with donor and receiver-response filters.
 6. Perturbation experiments before therapeutic nomination.
 

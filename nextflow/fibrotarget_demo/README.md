@@ -1,10 +1,10 @@
 # FibroTarget-Liver Nextflow Demo
 
-This standalone Nextflow subproject tests the pipeline contract with a small GSE136103-derived 10x-style demo dataset. It is designed to run locally on a laptop and to map cleanly to AWS Batch for production execution.
+This standalone Nextflow subproject tests the pipeline contract with a small GSE136103-derived 10x-style demo dataset. It runs locally on a laptop and uses the same input/output pattern that can be extended to AWS Batch.
 
 ## What This Demo Proves
 
-The demo does not reanalyze the full liver atlas. It proves the production contract:
+The demo does not reanalyze the full liver atlas. It proves the contract a production workflow needs:
 
 - a sample sheet points to 10x-style input data
 - metadata are read in a consistent format
@@ -12,7 +12,7 @@ The demo does not reanalyze the full liver atlas. It proves the production contr
 - compartment and QC summaries are written
 - outputs land in a predictable report directory
 
-That is the same contract a larger AWS workflow would use for proprietary or full public datasets.
+That is the same pattern a larger workflow would use for proprietary or full public datasets.
 
 ## Inputs
 
@@ -69,12 +69,12 @@ cat reports/nextflow_demo/demo_run_summary.md
 
 ## AWS Pattern
 
-The AWS profile is a template for production execution. Before running it, create:
+The AWS profile is a production template. Before running it, create:
 
 - an S3 bucket for inputs, work, and results
-- an ECR image containing the R runtime and required packages
+- an ECR image with the R runtime and required packages
 - an AWS Batch queue and job definition
-- Nextflow AWS credentials through your usual AWS profile or environment
+- AWS credentials through the usual profile or environment
 
 ```bash
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
